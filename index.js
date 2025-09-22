@@ -6,12 +6,14 @@ import { readFile } from 'fs/promises';
 import path from 'path';
 import { conexion } from './db/conexion.js';
 import {router} from './routes/usuarios.js';
+import { salonesRouter } from './routes/salonesR.js';
 
 
 const app = express();
 
 app.use(express.json());
 
+app.use('/api/salones', salonesRouter);
 app.use('/api/usuarios', router);
 
 process.loadEnvFile();
