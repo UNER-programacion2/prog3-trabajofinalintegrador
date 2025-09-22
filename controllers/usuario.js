@@ -7,17 +7,18 @@ import path from 'path';
 import { conexion } from '../db/conexion.js';
 
 /* GET Usuarios*/
-    const getUsuarios = async (res, req) =>{
+    const getUsuarios = async (req, res) =>{
     try {
         const sql = 'SELECT * FROM usuarios WHERE activo = 1';
-        const [results, fields] = await conexion.query(sql);
-        // console.log(results); 
-        // console.log(fields); 
-        res.status(200).
-        json({'ok':true, 'usuarios':results});
+        const [results] = await conexion.query(sql);
+        console.log(results);
+        res.status(200);  
+        res.json({
+             ok: true, usuarios: results
+            });
 
     } catch (error) {
-        res.status(500).json({ message: 'Error del lado del servidor al traer los usuarios', error: err.message });
+        res.status(500).json({ message: 'Error del lado del servidor al traer los usuarios', error: error.message });
         console.log(error);
     }
 }
@@ -30,30 +31,26 @@ const getUsuarioConId = async (req, res) => {
         const [results, fields] = await conexion.query(sql);
         console.log(results); console.log(fields);
 
-        res.status(200)
-        .json({ ok: true, usuario: results });
+        res.json({ ok: true, usuario: results });
     } catch (error) {
         console.log(error);
         res.status(500)
         .json({ ok: false, mensaje: 'Error al obtener usuarios' });
     }
 }
-
+/* add(POST) Usuario nuevo*/
 const addUsuario = async (req, res) => {
 
 }
+
+/* edit(PUT) Usuario con ID*/
 const editUsuario  = async (req, res) =>{
 
 }
-
+/* DELETE Usuario*/
 const deleteUsuario = async (req, res) => {
 
 }
 
-module.exports = {getUsuarios, getUsuarioConId, addUsuario, editUsuario, deleteUsuario};
+export{getUsuarios, getUsuarioConId, addUsuario, editUsuario, deleteUsuario};
 
-
-process.loadEnvFile();
-app.listen(process.env.PUERTO, () => {
-    console.log(`Servidor iniciado en ${process.env.PUERTO}`);
-})
