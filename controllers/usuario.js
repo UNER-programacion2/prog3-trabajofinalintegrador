@@ -4,7 +4,7 @@ import { conexion } from '../db/conexion.js';
 /* GET Usuarios*/
     const getUsuarios = async (req, res) =>{
     try {
-        const sql = 'SELECT * FROM susuarios WHERE activo = 1';
+        const sql = 'SELECT * FROM usuarios WHERE activo = 1';
         const [results] = await conexion.query(sql);
         console.log(results);
         res.json({
