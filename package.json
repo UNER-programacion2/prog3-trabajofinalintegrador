@@ -17,5 +17,6 @@
     "helmet": "^8.1.0",
     "mysql2": "^3.15.0",
     "nodemailer": "^7.0.6"
-  }
+  },
+  "devDependencies": {}
 }
