@@ -1,9 +1,4 @@
-import express from 'express';
-import handlebars from 'handlebars';
-import nodemailer from 'nodemailer';
-import { fileURLToPath} from 'url';
-import { readFile } from 'fs/promises';
-import path from 'path';
+
 import { conexion } from '../db/conexion.js';
 
 /* GET Usuarios*/
@@ -12,7 +7,6 @@ import { conexion } from '../db/conexion.js';
         const sql = 'SELECT * FROM usuarios WHERE activo = 1';
         const [results] = await conexion.query(sql);
         console.log(results);
-        res.status(200);  
         res.json({
              ok: true, usuarios: results
             });
@@ -28,10 +22,15 @@ const getUsuarioConId = async (req, res) => {
     try {
         const usuario_id = req.params.usuario_id
         const sql = `SELECT * FROM usuarios WHERE usuario_id = ${usuario_id} AND activo = 1`;
-        const [results, fields] = await conexion.query(sql);
-        console.log(results); console.log(fields);
-
-        res.json({ ok: true, usuario: results });
+        const [result] = await conexion.query(sql);
+        if(result.length === 0){
+        res.status(404)
+        .json({ ok: false, mensaje: `No existe Usuario con el ID ${usuario_id}` })
+        console.log(result);
+        }else{
+        console.log(result);
+        res.json({ ok: true, usuario: result });
+    }
     } catch (error) {
         console.log(error);
         res.status(500)
