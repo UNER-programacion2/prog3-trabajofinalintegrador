@@ -62,7 +62,7 @@ app.post('/notificacion', async (req, res) => {
     //res.json({'ok':true});
 })
 
-process.loadEnvFile();
+// process.loadEnvFile();
 app.listen(process.env.PUERTO, () => {
     console.log(`Servidor iniciado en ${process.env.PUERTO}`);
 })
