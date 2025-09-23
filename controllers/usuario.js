@@ -44,9 +44,40 @@ const getUsuarioConId = async (req, res) => {
 }
 /* add(POST) Usuario nuevo*/
 const addUsuario = async (req, res) => {
-    
-}
+    try {
+        const { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario } = req.body;
 
+        const sql = `
+        INSERT INTO usuarios (nombre, apellido, nombre_usuario, contrasenia, tipo_usuario) 
+        VALUES (?, ?, ?, ?, ?)
+        `;
+
+        const [result] = await conexion.query(sql, [
+        nombre, apellido, nombre_usuario, contrasenia, tipo_usuario
+        ]);
+
+        return res.status(201)
+                .json({
+                    ok: true,
+                    message: `Se creó el usuario con el id ${result.insertId}`,
+                    usuario_id: result.insertId
+                });
+
+    } catch (error) {
+            if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400)
+                        .json({ ok: false, mensaje: `El nombre de usuario '${req.body.nombre_usuario}' ya existe` });
+            }
+
+            console.error(error);
+            return res.status(500)
+                .json({
+                        ok: false,
+                        mensaje: 'Error al crear usuario',
+                        error: error.message
+                    });
+        }
+};
 /* edit(PUT) Usuario con ID*/
 const editUsuario  = async (req, res) =>{
 
