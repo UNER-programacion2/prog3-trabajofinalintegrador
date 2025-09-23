@@ -1,5 +1,6 @@
 //BREAD SALONES
 //import express from 'express';
+import { ok } from 'assert';
 import { conexion } from '../db/conexion.js';
 
 
@@ -62,31 +63,47 @@ const postSalon = async (req, res)=>{
     }
 
 }
+
+
 //PUT
-// const putSalon = async (req, res)=>{    
+const putSalon = async (req, res)=>{    
+    try{
+        const salon_id = req.params.salon_id;
+        const sql = `SELECT * FROM salones WHERE activo = 1 and salon_id = ?`;
+                
+        const [results] = await conexion.execute(sql, [salon_id]);
+                
+        if(results.length === 0){
+            return res.status(404).json({estado: false, mensaje: 'El salón no existe.'})
+        }
 
-//     try {
-//         const salon_id = req.params.salon_id
-//          const {titulo, direccion, capacidad, importe} = req.body;
-//         const sql = `SELECT * FROM salones WHERE activo = 1 and salon_id = ?`;
+        if(!req.body.titulo || !req.body.direccion || !req.body.capacidad || !req.body.importe){
+            return res.status(400).json
+            ({estado: false, mensaje: 'Faltan campos requeridos.'})
+        }
+        
+        const {titulo, direccion, capacidad, importe} = req.body;
+        
+        const valores = [titulo, direccion, capacidad, importe, salon_id];
+        const sql2 = `UPDATE salones SET titulo = ?, direccion = ?, capacidad = ? , importe = ? WHERE salon_id = ?`;
 
-//         const [results] = await conexion.execute(sql,salon_id);
-      
-//         if (results.length === 0) {
-//             return res.status(404).json
-//                 ({ estado: false, mensaje: 'Este salon no existe'})
+        const [result]= await conexion.execute(sql2, valores);
+        //console.log(result) 
 
+        if (result.changedRows === 0) {
+            return res.status(200).json
+                ({estado: true,mensaje: `no se realizaron cambios en el salon: ${salon_id}.`});
+        }
+        res.status(200).
+            json({estado: true, mensaje: `Salón modificado. id ${salon_id}`});
+            
+    }catch(err) {
+        console.log('Error en PUT /salones/:salon_id', err);
+        res.status(500).json
+            ({estado: false,mensaje: 'Error interno del servidor.'})
+    }
+};
 
-
-//         }
-//     } catch (error) {
-//         console.log('error en PUT/salones/:salon_id', error);
-//         res.status(500).json
-//             ({ ok: false, mensaje: 'Error interno del servidor' });
-//     }
-  
-
-// }
 
 
 //DELETE
@@ -103,4 +120,4 @@ const postSalon = async (req, res)=>{
 
 
 
-export{getSalones, getSalonConId, postSalon};
+export{getSalones, getSalonConId, postSalon, putSalon};
