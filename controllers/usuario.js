@@ -35,7 +35,7 @@ const getUsuarioConId = async (req, res) => {
         }else{
             console.log(result);
             res.json({ ok: true, usuario: result });
-    }
+    } 
     } catch (error) {
         console.log(error);
         res.status(500)
@@ -44,7 +44,7 @@ const getUsuarioConId = async (req, res) => {
 }
 /* add(POST) Usuario nuevo*/
 const addUsuario = async (req, res) => {
-
+    
 }
 
 /* edit(PUT) Usuario con ID*/

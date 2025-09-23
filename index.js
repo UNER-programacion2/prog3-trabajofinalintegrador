@@ -5,7 +5,7 @@ import { fileURLToPath} from 'url';
 import { readFile } from 'fs/promises';
 import path from 'path';
 import { conexion } from './db/conexion.js';
-import {router} from './routes/usuarios.js';
+import {usuariosRouter} from './routes/usuarios.js';
 import { salonesRouter } from './routes/salonesR.js';
 
 
@@ -14,7 +14,9 @@ const app = express();
 app.use(express.json());
 
 app.use('/api/salones', salonesRouter);
-app.use('/api/usuarios', router);
+app.use('/api/usuarios', usuariosRouter);
+
+
 
 process.loadEnvFile();
 app.listen(process.env.PUERTO, () => {

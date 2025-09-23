@@ -1,14 +1,14 @@
 
 import express from 'express';
 import { getUsuarios, getUsuarioConId, addUsuario, editUsuario, deleteUsuario } from '../controllers/usuario.js';
-const router = express.Router();
+const usuariosRouter = express.Router();
 
-router.get('/', getUsuarios);
-router.get('/:usuario_id', getUsuarioConId);
-router.post('/', addUsuario);
-router.put('/:usuario_id', editUsuario);
-router.delete('/:usuario_id',  deleteUsuario );
+usuariosRouter.get('/', getUsuarios);
+usuariosRouter.get('/:usuario_id', getUsuarioConId);
+usuariosRouter.post('/', addUsuario);
+usuariosRouter.put('/:usuario_id', editUsuario);
+usuariosRouter.delete('/:usuario_id',  deleteUsuario );
 
-export {router};
+export {usuariosRouter};
 
 
