@@ -1,13 +1,13 @@
 
 import express from 'express';
-import ServiciosController from '../controllers/serviciosController.js';
+import ServiciosController from '../controllers/servicios.js';
 
-const router = express.Router();
+const serviciosrouter = express.Router();
 
-router.get('/', ServiciosController.getServicios);
-router.get('/:servicio_id', ServiciosController.getServicioConId);
-router.post('/', ServiciosController.addServicio);
-router.put('/:servicio_id', ServiciosController.editServicio);
-router.delete('/:servicio_id', ServiciosController.deleteServicio);
+serviciosrouter.get('/', ServiciosController.getServicios);
+serviciosrouter.get('/:servicio_id', ServiciosController.getServicioConId);
+serviciosrouter.post('/', ServiciosController.addServicio);
+serviciosrouter.put('/:servicio_id', ServiciosController.editServicio);
+serviciosrouter.delete('/:servicio_id', ServiciosController.deleteServicio);
 
-export default router;
+export default serviciosrouter;
