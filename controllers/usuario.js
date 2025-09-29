@@ -20,17 +20,22 @@ import { conexion } from '../db/conexion.js';
 /* GET Usuario con ID*/
 const getUsuarioConId = async (req, res) => {
     try {
-        const usuario_id = req.params.usuario_id
+        const usuario_id = parseInt(req.params.usuario_id);
+        console.log(usuario_id);
+        if (Number.isNaN(usuario_id)) {
+            return res.status(400)
+                      .json({ ok: false, mensaje: 'ID inválido' });
+        }   
         const sql = `SELECT * FROM usuarios WHERE usuario_id = ${usuario_id} AND activo = 1`;
         const [result] = await conexion.query(sql);
         if(result.length === 0){
-        res.status(404)
-        .json({ ok: false, mensaje: `No existe Usuario con el ID ${usuario_id}` })
-        console.log(result);
+            res.status(404)
+            .json({ ok: false, mensaje: `No existe Usuario con el ID ${usuario_id}` })
+            console.log(result);
         }else{
-        console.log(result);
-        res.json({ ok: true, usuario: result });
-    }
+            console.log(result);
+            res.json({ ok: true, usuario: result });
+    } 
     } catch (error) {
         console.log(error);
         res.status(500)
@@ -39,9 +44,40 @@ const getUsuarioConId = async (req, res) => {
 }
 /* add(POST) Usuario nuevo*/
 const addUsuario = async (req, res) => {
+    try {
+        const { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario } = req.body;
 
-}
+        const sql = `
+        INSERT INTO usuarios (nombre, apellido, nombre_usuario, contrasenia, tipo_usuario) 
+        VALUES (?, ?, ?, ?, ?)
+        `;
 
+        const [result] = await conexion.query(sql, [
+        nombre, apellido, nombre_usuario, contrasenia, tipo_usuario
+        ]);
+
+        return res.status(201)
+                .json({
+                    ok: true,
+                    message: `Se creó el usuario con el id ${result.insertId}`,
+                    usuario_id: result.insertId
+                });
+
+    } catch (error) {
+            if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400)
+                        .json({ ok: false, mensaje: `El nombre de usuario '${req.body.nombre_usuario}' ya existe` });
+            }
+
+            console.error(error);
+            return res.status(500)
+                .json({
+                        ok: false,
+                        mensaje: 'Error al crear usuario',
+                        error: error.message
+                    });
+        }
+};
 /* edit(PUT) Usuario con ID*/
 const editUsuario  = async (req, res) =>{
 
