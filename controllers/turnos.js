@@ -1,6 +1,6 @@
 import { conexion } from "../db/conexion.js";
 
-// GET
+// GET browser
 const getTurnos = async (req, res) => {
     try {
         const sql = "SELECT * FROM turnos WHERE activo = 1";
@@ -75,7 +75,7 @@ const getTurnoConId = async (req, res) => {
         return res.status(404).json({ ok: false, mensaje: "Turno no encontrado" });
         }
 
-        res.json({ ok: true, mensaje: "Turno eliminado (lógico)" });
+        res.json({ ok: true, mensaje: "Turno eliminado" });
     } catch (error) {
         console.log(error);
         res.status(500).json({ ok: false, mensaje: "Error al eliminar turno" });
