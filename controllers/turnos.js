@@ -1,6 +1,6 @@
 import { conexion } from "../db/conexion.js";
 
-// --------- GET ALL (Browse) ---------
+// GET
 const getTurnos = async (req, res) => {
     try {
         const sql = "SELECT * FROM turnos WHERE activo = 1";
@@ -12,7 +12,7 @@ const getTurnos = async (req, res) => {
     }
 };
 
-// --------- GET BY ID (Read) ---------
+// GET BY ID  
 const getTurnoConId = async (req, res) => {
     try {
         const { id } = req.params;
@@ -30,7 +30,7 @@ const getTurnoConId = async (req, res) => {
     }
 };
 
-    // --------- POST (Add) ---------
+    // POST 
     const addTurno = async (req, res) => {
     try {
         const { fecha, salon_id, servicio_id, cliente } = req.body;
@@ -44,7 +44,7 @@ const getTurnoConId = async (req, res) => {
     }
 };
 
-    // --------- PUT (Edit) ---------
+    // PUT 
     const updateTurno = async (req, res) => {
     try {
         const { id } = req.params;
@@ -64,7 +64,7 @@ const getTurnoConId = async (req, res) => {
     }
 };
 
-    // --------- DELETE (Delete lógico) ---------
+    // --------- DELETE 
     const deleteTurno = async (req, res) => {
     try {
         const { id } = req.params;
