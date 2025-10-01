@@ -3,7 +3,7 @@ import { getTurnos, getTurnoConId, addTurno, updateTurno, deleteTurno } from '..
 
 const turnosRouter = express.Router();
 
-turnosRouter.get('/turnos', getTurnos);
+turnosRouter.get('/', getTurnos);
 turnosRouter.get('/turnos/:id', getTurnoConId);
 turnosRouter.post('/turnos', addTurno);
 turnosRouter.put('/turnos/:id', updateTurno);
