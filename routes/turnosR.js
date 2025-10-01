@@ -1,5 +1,5 @@
 import express from 'express';
-import { getTurnos, getTurnoConId, addTurno, updateTurno, deleteTurno } from '../controllers/turnos.js';
+import { getTurnos, getTurnoConId, addTurno, updateTurno, deleteTurno } from '../controllers/turnos.controller.js';
 
 const turnosRouter = express.Router();
 
@@ -9,4 +9,4 @@ turnosRouter.post('/turnos', addTurno);
 turnosRouter.put('/turnos/:id', updateTurno);
 turnosRouter.delete('/turnos/:id', deleteTurno);
 
-export { turnosRouter };
+export default turnosRouter ;
