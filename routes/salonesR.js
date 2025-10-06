@@ -1,11 +1,15 @@
 import express from 'express';
-import { getSalones, getSalonConId, postSalon, putSalon, deleteSalon } from '../controllers/salones.js';
+import salonesController from '../controllers/salones.js';
+
 const salonesRouter = express.Router();
 
-salonesRouter.get('/', getSalones);
-salonesRouter.get('/:salon_id', getSalonConId);
-salonesRouter.post('/', postSalon);
-salonesRouter.put('/:salon_id', putSalon);
-salonesRouter.delete('/:salon_id', deleteSalon);
+const salonesController = new salonesRouter();
+
+
+salonesRouter.get('/', salonesController.getSalones);
+salonesRouter.get('/:salon_id', salonesController.getSalonConId);
+salonesRouter.post('/', salonesController.postSalon);
+salonesRouter.put('/:salon_id', salonesController.putSalon);
+salonesRouter.delete('/:salon_id', salonesController.deleteSalon);
 
 export { salonesRouter };

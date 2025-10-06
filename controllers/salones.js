@@ -1,140 +1,126 @@
 //BREAD SALONES
-//import express from 'express';
 import { conexion } from '../db/conexion.js';
-
+import salonesDb from '../db/salonesDB.js'
 
 //GET SALONES 
-const getSalones =  async(req, res) => {
-    try {
-        const sql = 'SELECT * FROM salones WHERE activo = 1';
-        const [results] = await conexion.query(sql);
-        res.json
-            ({ok:true, salones :results});
 
-    } catch (err) {
-        console.log(err);
+export default class salonesController{
+    constructor(){
+        this.salonesServicios = new this.salonesServicios();
     }
-}
+    
+    getSalones =  async(req, res) => {
+        try {
+            const salones = await salonesDb.getSalones();
+            res.json
+                ({ok:true, salones :salones});
+        } catch (error) {
+            console.log('error en GET/salones', error);
+            res.status(500).json
+                ({ ok: false, mensaje: 'Error interno del servidor' });
+        }
+    }   
 
  //GET BY ID 
-const getSalonConId = async (req, res) => {
-    try {
-        const salon_id = req.params.salon_id
-        const sql = `SELECT * FROM salones WHERE activo = 1 and salon_id = ?`;
-        const valores = [salon_id];
+    getSalonConId = async (req, res) => {
+        try {
+           const salon = await salonesDb.getSalonConId(req.params.salon_id);
+        
+            if (salon.length === 0) {
+                return res.status(404).json
+                    ({ estado: false, mensaje: 'salon no encontrado'})
+            }
+            res.json
+                ({ ok: true, salones: salon [0] });
 
-        const [results] = await conexion.execute(sql,valores);
-      
-        if (results.length === 0) {
-            return res.status(404).json
-                ({ estado: false, mensaje: 'salon no encontrado'})
+        } catch (error) {
+            console.log('error en GET/salones/:salon_id', error);
+            res.status(500).json
+                ({ ok: false, mensaje: 'Error interno del servidor' });
         }
-        res.json
-            ({ ok: true, salones: results [0] });
-
-    } catch (error) {
-        console.log('error en GET/salones/:salon_id', error);
-        res.status(500).json
-            ({ ok: false, mensaje: 'Error interno del servidor' });
     }
-}
 
 //POST
-const postSalon = async (req, res)=>{    
-    try{
-        const {titulo, direccion, capacidad, importe} = req.body;
+    postSalon = async (req, res)=>{    
+        try{
+            const {titulo, direccion, capacidad, importe} = req.body;
+            if(!titulo || !direccion || !capacidad || !importe){
+                return res.status(400).json
+                    ({estado: false, mensaje: 'Faltan campos requeridos.'})
+            }
 
-        if(!titulo || !direccion || !capacidad || !importe){
-            return res.status(400).json
-                ({estado: false, mensaje: 'Faltan campos requeridos.'})
+            const result= await salonesDb.postSalon({titulo, direccion, capacidad, importe});
+            res.status(201).json
+                ({estado: true, mensaje: `Salón creado con id ${result.insertId}.`})
+
+        }catch (error) {
+            console.log('Error en POST /salones', error);
+            res.status(500).json
+                ({estado: false,mensaje: 'Error interno del servidor.'})
         }
 
-        const valores = [titulo, direccion, capacidad, importe];
-        const sql = 'INSERT INTO salones (titulo, direccion, capacidad, importe) VALUES (?,?,?,?)';
-        const [result]= await conexion.execute(sql, valores);
-        
-        res.status(201).json
-            ({estado: true, mensaje: `Salón creado con id ${result.insertId}.`})
-
-    }catch (error) {
-        console.log('Error en POST /salones', error);
-        res.status(500).json
-            ({estado: false,mensaje: 'Error interno del servidor.'})
     }
-
-}
 
 
 //PUT
-const putSalon = async (req, res)=>{    
-    try{
-        //busca el id
-        const salon_id = req.params.salon_id;
-        const sql = `SELECT * FROM salones WHERE activo = 1 and salon_id = ?`;
+    putSalon = async (req, res)=>{    
+        try{
+            const salon_id = req.params.salon_id;
+            const {titulo, direccion, capacidad, importe} = req.body;
+            const result= await salonesDb.putSalon(salon_id, { titulo, direccion, capacidad, importe });
+                    
+            if(results.length === 0){
+                return res.status(404).json({estado: false, mensaje: 'El salón no existe'})
+            }
+
+            if(!titulo || !direccion || !capacidad || !importe){
+                return res.status(400).json
+                ({estado: false, mensaje: 'Faltan campos requeridos.'})
+            }
+
+            //solo para saber si no hizo ningun cambio, se guarda como estaba
+            if (result.changedRows === 0) {
+                return res.status(200).json
+                    ({estado: true,mensaje: `no se realizaron cambios en el salon: ${salon_id}.`});
+            }
+            res.status(200).json
+                ({estado: true, mensaje: `Salón modificado. id ${salon_id}`});
                 
-        const [results] = await conexion.execute(sql, [salon_id]);
-        const {titulo, direccion, capacidad, importe} = req.body;
-                
-        if(results.length === 0){
-            return res.status(404).json({estado: false, mensaje: 'El salón no existe'})
+        }catch(error) {
+            console.log('Error en PUT /salones/:salon_id', error);
+            res.status(500).json
+                ({estado: false,mensaje: 'Error interno del servidor.'})
         }
-
-        if(!titulo || !direccion || !capacidad || !importe){
-            return res.status(400).json
-            ({estado: false, mensaje: 'Faltan campos requeridos.'})
-        }
-        
-        const valores = [titulo, direccion, capacidad, importe, salon_id];
-        const sql2 = `UPDATE salones SET titulo = ?, direccion = ?, capacidad = ? , importe = ? WHERE salon_id = ?`;
-
-        const [result]= await conexion.execute(sql2, valores);
-        //console.log(result) 
-
-        //solo para saber si no hizo ningun cambio, se guarda como estaba
-        if (result.changedRows === 0) {
-            return res.status(200).json
-                ({estado: true,mensaje: `no se realizaron cambios en el salon: ${salon_id}.`});
-        }
-        res.status(200).json
-            ({estado: true, mensaje: `Salón modificado. id ${salon_id}`});
-            
-    }catch(error) {
-        console.log('Error en PUT /salones/:salon_id', error);
-        res.status(500).json
-            ({estado: false,mensaje: 'Error interno del servidor.'})
     }
-};
 
 
 
 //DELETE
-const deleteSalon = async (req, res)=>{    
-    try{
-         //busca el id
-        const salon_id = req.params.salon_id;
-        const sql = `SELECT * FROM salones WHERE activo = 1 and salon_id = ?`;
-        const [results] = await conexion.execute(sql, [salon_id]);
+ deleteSalon = async (req, res)=>{    
+        try{
+            const salon_id = req.params.salon_id;
+            const results = await salonesDb.deleteSalon(salon_id);
+           
+            if(results.length === 0){
+                return res.status(404).json
+                    ({estado: false, mensaje: 'El salon no existe o ya fue eliminado'})
+            }
+           
+            console.log(resultado)
 
-        if(results.length === 0){
-            return res.status(404).json
-                ({estado: false, mensaje: 'El salon no existe o ya fue eliminado'})
+            res.status(200).json
+                ({estado: true, mensaje: `Salón eliminado. id ${salon_id}`});
+
+        }catch (error) {
+            console.log('Error en DELETE /salones', error);
+            res.status(500).json
+                ({estado: false,mensaje: 'Error interno del servidor.'})
         }
 
-        const sql2= `UPDATE salones SET activo = 0 WHERE salon_id = ? `;
-        const [resultado] = await conexion.execute(sql2, [salon_id]);
-        console.log(resultado)
-
-        res.status(200).json
-            ({estado: true, mensaje: `Salón eliminado. id ${salon_id}`});
-
-    }catch (error) {
-        console.log('Error en DELETE /salones', error);
-        res.status(500).json
-            ({estado: false,mensaje: 'Error interno del servidor.'})
     }
+
 
 }
 
 
-
-export{getSalones, getSalonConId, postSalon, putSalon, deleteSalon};
+//export{getSalones, getSalonConId, postSalon, putSalon, deleteSalon};
