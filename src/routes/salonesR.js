@@ -1,9 +1,8 @@
 import express from 'express';
-import salonesController from '../controllers/salones.js';
-
+import salonesController from '../controllers/salones.js'; 
 const salonesRouter = express.Router();
 
-const salonesController = new salonesRouter();
+//const salonesController = new salonesRouter();
 
 
 salonesRouter.get('/', salonesController.getSalones);
