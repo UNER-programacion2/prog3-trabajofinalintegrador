@@ -1,17 +1,17 @@
 //BREAD SALONES
-import { conexion } from '../db/conexion.js';
-import salonesDb from '../db/salonesDB.js'
+import SalonesServicios from "../servicios/salonesServicios.js";
 
 //GET SALONES 
 
 export default class salonesController{
-    constructor(){
-        this.salonesServicios = new this.salonesServicios();
-    }
+
+    constructor() {
+    this.SalonesServicios = new SalonesServicios();
+  }
     
     getSalones =  async(req, res) => {
         try {
-            const salones = await salonesDb.getSalones();
+            const salones = await this.SalonesServicios.getSalones();
             res.json
                 ({ok:true, salones :salones});
         } catch (error) {
@@ -24,7 +24,8 @@ export default class salonesController{
  //GET BY ID 
     getSalonConId = async (req, res) => {
         try {
-           const salon = await salonesDb.getSalonConId(req.params.salon_id);
+            const id = req.params.salon_id;
+           const salon = await this.SalonesServicios.getSalonConId(id);
         
             if (salon.length === 0) {
                 return res.status(404).json
@@ -49,7 +50,7 @@ export default class salonesController{
                     ({estado: false, mensaje: 'Faltan campos requeridos.'})
             }
 
-            const result= await salonesDb.postSalon({titulo, direccion, capacidad, importe});
+            const result= await this.SalonesServicios.postSalones({titulo, direccion, capacidad, importe});
             res.status(201).json
                 ({estado: true, mensaje: `Salón creado con id ${result.insertId}.`})
 
@@ -67,15 +68,16 @@ export default class salonesController{
         try{
             const salon_id = req.params.salon_id;
             const {titulo, direccion, capacidad, importe} = req.body;
-            const result= await salonesDb.putSalon(salon_id, { titulo, direccion, capacidad, importe });
-                    
-            if(results.length === 0){
-                return res.status(404).json({estado: false, mensaje: 'El salón no existe'})
-            }
-
+            
             if(!titulo || !direccion || !capacidad || !importe){
                 return res.status(400).json
                 ({estado: false, mensaje: 'Faltan campos requeridos.'})
+            }
+
+            const result= await this.SalonesServicios.putSalones(salon_id, { titulo, direccion, capacidad, importe });
+            
+            if(result.length === 0){
+                return res.status(404).json({estado: false, mensaje: 'El salón no existe'})
             }
 
             //solo para saber si no hizo ningun cambio, se guarda como estaba
@@ -99,14 +101,14 @@ export default class salonesController{
  deleteSalon = async (req, res)=>{    
         try{
             const salon_id = req.params.salon_id;
-            const results = await salonesDb.deleteSalon(salon_id);
+            const results = await this.SalonesServicios.deleteSalones(salon_id);
            
-            if(results.length === 0){
+            if(results.affectedRows === 0){
                 return res.status(404).json
                     ({estado: false, mensaje: 'El salon no existe o ya fue eliminado'})
             }
            
-            console.log(resultado)
+            //console.log(resultado)
 
             res.status(200).json
                 ({estado: true, mensaje: `Salón eliminado. id ${salon_id}`});

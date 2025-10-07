@@ -1,28 +1,28 @@
-import Salones from "../db/salonesDB.js";
+import salonesDb from "../db/salonesDB.js";
 
 export default class salonesServicios{
+
     constructor(){
-        this.salones = Salones();
+        this.salones = new salonesDb();
     }
 
     getSalones = () => {
         return this.salones.getSalones();
-        }
+    }
 
-    getSalonesConId = () => {
-        return this.salones.getSalonesConId();
-        }
-    
-    postSalones = () => {
-        return this.salones.postSalones();
-        }
+    getSalonConId = (salon_id) => {
+        return this.salones.getSalonConId(salon_id);
+    }
 
-    putSalones = () => {
-        return this.salones.putSalones();
-        }
-        
-    deleteSalones = () => {
-        return this.salones.deleteSalones();
-        }
+    postSalones = (data) => {
+        return this.salones.postSalon(data);
+    }
 
-}
+    putSalones = (salon_id, data) => {
+        return this.salones.putSalon(salon_id, data);
+    }
+
+    deleteSalones = (salon_id) => {
+        return this.salones.deleteSalon(salon_id);
+    }
+    }
