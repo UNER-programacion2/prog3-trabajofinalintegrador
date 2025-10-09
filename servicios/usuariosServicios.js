@@ -1,19 +1,24 @@
-import UsuariosDb from "../db/usuariosdb.js";
+import UsuariosDb from "../db/usuariosDB.js";
 
 export default class UsuariosServicios {
   constructor() {
     this.UsuariosDb = new UsuariosDb();
   }
 
-  getUsuarios = () => this.UsuariosDb.getUsuarios();
-
-  getUsuarioConId = async (id) => {
-    const usuarios = await this.UsuariosDb.getUsuarioConId(id);
-    return usuarios;
+  getUsuarios = async () => {
+    return await this.UsuariosDb.getUsuarios();
   };
 
-  addUsuario = async (datos) => {
-    return await this.UsuariosDb.addUsuario(datos);
+  getUsuarioConId = async (id) => {
+    return await this.UsuariosDb.getUsuarioConId(id);
+  };
+
+  postUsuario = async (data) => {
+    return await this.UsuariosDb.postUsuario(data);
+  };
+
+  putUsuario = async (id, data) => {
+    return await this.UsuariosDb.putUsuario(id, data);
   };
 
   deleteUsuario = async (id) => {

@@ -1,18 +1,20 @@
 
 import express from 'express';
-import { getUsuarios, getUsuarioConId, addUsuario, editUsuario, deleteUsuario } from '../controllers/usuario.js';
+import UsuariosController from '../controllers/usuarios.js';
+
 const usuariosRouter = express.Router();
+const controller = new UsuariosController();
 
+// GET todos los usuarios
+usuariosRouter.get('/', controller.getUsuarios);
 
-usuariosRouter.get('/', getUsuarios);
+// POST crear usuario
+usuariosRouter.post('/', controller.postUsuario);
 
-usuariosRouter.post('/', addUsuario);
-
+// Rutas con ID
 usuariosRouter.route('/:usuario_id')
-    .get(getUsuarioConId)
-    .put(editUsuario)
-    .delete(deleteUsuario );
+    .get(controller.getUsuarioConId)   // GET usuario por ID
+    .put(controller.putUsuario)        // PUT actualizar usuario
+    .delete(controller.deleteUsuario); // DELETE eliminar usuario
 
-export {usuariosRouter};
-
-
+export { usuariosRouter };
