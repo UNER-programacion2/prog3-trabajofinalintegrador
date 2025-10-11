@@ -1,8 +1,7 @@
 //BREAD SALONES
 import SalonesServicios from "../servicios/salonesServicios.js";
 
-//GET SALONES 
-
+//GET SALONES - OBTENER TODOS LOS SALONES
 export default class salonesController{
 
     constructor() {
@@ -21,7 +20,7 @@ export default class salonesController{
         }
     }   
 
- //GET BY ID 
+ //GET BY ID - OBTENER MEDIANTE EL ID
     getSalonConId = async (req, res) => {
         try {
             const id = req.params.salon_id;
@@ -41,7 +40,7 @@ export default class salonesController{
         }
     }
 
-//POST
+//POST - CREAR SALON 
     postSalon = async (req, res)=>{    
         try{
             const {titulo, direccion, capacidad, importe} = req.body;
@@ -63,7 +62,7 @@ export default class salonesController{
     }
 
 
-//PUT
+//PUT - EDITAR SALON
     putSalon = async (req, res)=>{    
         try{
             const salon_id = req.params.salon_id;
@@ -97,7 +96,7 @@ export default class salonesController{
 
 
 
-//DELETE
+//DELETE - ELIMINAR SALON(soft delete)
  deleteSalon = async (req, res)=>{    
         try{
             const salon_id = req.params.salon_id;
@@ -121,8 +120,5 @@ export default class salonesController{
 
     }
 
-
 }
 
-
-//export{getSalones, getSalonConId, postSalon, putSalon, deleteSalon};
