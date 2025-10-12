@@ -1,13 +1,13 @@
-import salonesDb from "../db/salonesDB.js";
+import salonesDb from "../db/reservasServiciosDb.js";
 
 export default class salonesServicios{
 
     constructor(){
-        this.salones = new salonesDb();
+        this.reservaServicio = new reservaServicio();
     }
     //obtener todos los salones
-    getSalones = () => {
-        return this.salones.getSalones();
+    getAllReservasServicios = () => {
+        return this.salones.getAllReservasServicios();
     }
 
     //obtener mediante el id
@@ -33,5 +33,4 @@ export default class salonesServicios{
     deleteSalones = (salon_id) => {
         return this.salones.deleteSalon(salon_id);
     }
-
-}
+    }
