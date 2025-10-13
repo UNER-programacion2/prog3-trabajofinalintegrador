@@ -1,12 +1,3 @@
-// import mysql from 'mysql2/promise';
-
-// export const conexion = await mysql.createConnection({
-//   host: 'localhost',
-//   port: 3700,
-//   user: 'adminReservas',
-//   database: 'reservas',
-//   password: 'pass1234'
-// });
 import dotenv from 'dotenv';
 dotenv.config(); // Cargar variables de entorno primero
 
