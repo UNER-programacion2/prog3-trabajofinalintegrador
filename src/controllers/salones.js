@@ -10,13 +10,14 @@ export default class salonesController{
     
     getSalones =  async(req, res) => {
         try {
-            const salones = await this.SalonesServicios.getSalones();
+            const salones = await this.SalonesServicios.getAllSalones();
             res.json
-                ({ok:true, salones :salones});
+                ({estado:true, datos :salones});
+
         } catch (error) {
             console.log('error en GET/salones', error);
             res.status(500).json
-                ({ ok: false, mensaje: 'Error interno del servidor' });
+                ({ estado: false, mensaje: 'Error interno del servidor' });
         }
     }   
 
@@ -24,7 +25,7 @@ export default class salonesController{
     getSalonConId = async (req, res) => {
         try {
             const id = req.params.salon_id;
-           const salon = await this.SalonesServicios.getSalonConId(id);
+            const salon = await this.SalonesServicios.getSalonConId(id);
         
             if (salon.length === 0) {
                 return res.status(404).json
@@ -41,17 +42,23 @@ export default class salonesController{
     }
 
 //POST - CREAR SALON 
-    postSalon = async (req, res)=>{    
+    createSalon = async (req, res)=>{    
         try{
             const {titulo, direccion, capacidad, importe} = req.body;
-            if(!titulo || !direccion || !capacidad || !importe){
+
+            const salon = {
+                titulo, direccion, capacidad, importe
+            }
+
+            const nuevoSalon = await this.SalonesServicios.postSalones(salon);
+            
+            if(!nuevoSalon){
                 return res.status(400).json
                     ({estado: false, mensaje: 'Faltan campos requeridos.'})
             }
 
-            const result= await this.SalonesServicios.postSalones({titulo, direccion, capacidad, importe});
             res.status(201).json
-                ({estado: true, mensaje: `Salón creado con id ${result.insertId}.`})
+                ({estado: true, mensaje: 'Salón creado con id', salon: nuevoSalon})
 
         }catch (error) {
             console.log('Error en POST /salones', error);
@@ -63,24 +70,25 @@ export default class salonesController{
 
 
 //PUT - EDITAR SALON
-    putSalon = async (req, res)=>{    
+    editSalon = async (req, res)=>{    
         try{
             const salon_id = req.params.salon_id;
-            const {titulo, direccion, capacidad, importe} = req.body;
+            const datos = req.body;
+
+            const salonModificado= await this.SalonesServicios.putSalones(salon_id, datos);
             
-            if(!titulo || !direccion || !capacidad || !importe){
+            if(!salonModificado){
                 return res.status(400).json
-                ({estado: false, mensaje: 'Faltan campos requeridos.'})
+                    ({estado: false, mensaje: 'Faltan campos requeridos.'})
             }
 
-            const result= await this.SalonesServicios.putSalones(salon_id, { titulo, direccion, capacidad, importe });
-            
-            if(result.length === 0){
-                return res.status(404).json({estado: false, mensaje: 'El salón no existe'})
+            if(salonModificado.length === 0){
+                return res.status(404).json
+                    ({estado: false, mensaje: 'El salón no existe'})
             }
 
             //solo para saber si no hizo ningun cambio, se guarda como estaba
-            if (result.changedRows === 0) {
+            if (salonModificado.changedRows === 0) {
                 return res.status(200).json
                     ({estado: true,mensaje: `no se realizaron cambios en el salon: ${salon_id}.`});
             }
@@ -100,15 +108,14 @@ export default class salonesController{
  deleteSalon = async (req, res)=>{    
         try{
             const salon_id = req.params.salon_id;
-            const results = await this.SalonesServicios.deleteSalones(salon_id);
+            const salonElimniado = await this.SalonesServicios.deleteSalones(salon_id);
            
-            if(results.affectedRows === 0){
+            if(salonElimniado.affectedRows === 0){
                 return res.status(404).json
                     ({estado: false, mensaje: 'El salon no existe o ya fue eliminado'})
             }
            
             //console.log(resultado)
-
             res.status(200).json
                 ({estado: true, mensaje: `Salón eliminado. id ${salon_id}`});
 
