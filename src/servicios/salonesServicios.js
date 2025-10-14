@@ -33,4 +33,5 @@ export default class salonesServicios{
     deleteSalones = (salon_id) => {
         return this.salones.deleteSalon(salon_id);
     }
-    }
+
+}
