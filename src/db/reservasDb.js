@@ -13,16 +13,18 @@ export default class reservasDb{
         const [rows] = await conexion.execute(sql, [reserva_id]);
     }
 
-    postUsuario = async ({nombre, apellido, nombre_usuario, contrasenia, tipo_usuario }) =>{
-        const sql = `INSERT INTO reservas (nombre, apellido, nombre_usuario, contrasenia, tipo_usuario)
-        VALUES (?, ?, ?, ?, ?)`
+    postUsuario = async ({fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total }) =>{
+        const sql = `INSERT INTO reservas (fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total)
+        VALUES (?, ?, ?, ?, ?,?,?)`
 
         Const [result] = await conextion.execute(sql, [
-            nombre,
-            apellido,
-            nombre_usuario,
-            contrasenia,
-            tipo_usuario
+            fecha_reserva,
+            salon_id,
+            usuario_id,
+            turno_id,
+            foto_cumpleaniero,
+            tematica,
+            importe_total
         ])
         return result;
     }
