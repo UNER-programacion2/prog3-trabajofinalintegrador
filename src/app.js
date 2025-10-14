@@ -5,6 +5,9 @@ import { salonesRouter } from './routes/salonesR.js';
 import serviciosRouter from './routes/serviciosR.js';
 import turnosRouter from './routes/turnosR.js';
 import {emailRouter} from  './routes/emailR.js';
+import reservasServiciosRouter from './routes/reservasServiciosR.js';
+
+
 
 
 const app = express();
@@ -14,7 +17,7 @@ app.use('/api/usuarios', usuariosRouter);
 app.use('/api/servicios', serviciosRouter);
 app.use('/api/turnos', turnosRouter);
 app.use('/api/notificacion', emailRouter);
-
+app.use('/api/reservas_servicios', reservasServiciosRouter);
 // const PORT = process.env.PUERTO;
 // app.listen(PORT, () => console.log(`Servidor iniciado en puerto ${PORT}`));
 

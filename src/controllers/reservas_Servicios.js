@@ -1,8 +1,7 @@
 //bread reservas-salones
-import { conexion } from "../db/conexion.js";
 import  reservasServicioService from "../servicios/reservaServiciosService.js";
 
-export default class reservasSalones{
+export default class reservasServiciosController{
 
     constructor(){
         this.reservasServicios = new reservasServicioService();
@@ -11,9 +10,9 @@ export default class reservasSalones{
     // GET browser
     getReservasServicios =  async(req, res) => {
             try {
-                const salones = await this.reservasServicios.getReservasServicios();
+                const reserva_servicio = await this.reservasServicios.getAllReservasServicios();
                 res.json
-                    ({ok:true, salones :salones});
+                    ({estado:true,  reserva_servicio: reserva_servicio});
             } catch (error) {
                 console.log('error en GET/reservas_servicios', error);
                 res.status(500).json
@@ -21,37 +20,41 @@ export default class reservasSalones{
             }
         }   
 
-    }
+   
 
     // GET BY ID  
-    getReservasServiciosId = async (req, res) => {
+     getReservaServicioConId = async (req, res) => {
         try {
-            const { id } = req.params;
-            const sql = "SELECT * FROM reservas_servicios WHERE id = ? AND activo = 1";
-            const [results] = await conexion.query(sql, [id]);
+            const id = req.params;
+            const reserva_servicio = await this.reservasServicios.getReservaServicioConId(id);
 
-            if (results.length === 0) {
-            return res.status(404).json({ ok: false, mensaje: "Servicios reservado no encontrado" });
+            if (!reserva_servicio) {
+            return res.status(404).json
+                ({ estado: false, mensaje: "Servicios reservado no encontrado" });
             }
 
-            res.json({ ok: true, reservasServicios: results[0] });
+            res.json
+                ({ estado: true, reservasServicios: reserva_servicio[0] });
+                
         } catch (error) {
             console.log(error);
-            res.status(500).json({ ok: false, mensaje: "Error al obtener Servicio reservado" });
+            res.status(500).json
+                ({ ok: false, mensaje: "Error al obtener Servicio reservado" });
         }
     };
 
-        // POST 
+    // POST 
     addServicioReserva = async (req, res) => {
         try {
             const { fecha, salon_id, servicio_id, cliente } = req.body;
-            const sql = "INSERT INTO reservas_servicios (fecha, salon_id, servicio_id, cliente, activo) VALUES (?, ?, ?, ?, 1)";
-            const [result] = await conexion.query(sql, [fecha, salon_id, servicio_id, cliente]);
+            const [result] = await this.reservasServicios.addServicioReserva({fecha, salon_id, servicio_id, cliente});
 
-            res.json({ ok: true, id: result.insertId, fecha, salon_id, servicio_id, cliente });
+            res.json
+                ({ ok: true, id: result.insertId, fecha, salon_id, servicio_id, cliente });
         } catch (error) {
+
             console.log(error);
-            res.status(500).json({ ok: false, mensaje: "Error al crear la reserva de servicio" });
+            res.status(500).json({ estado: false, mensaje: "Error al crear la reserva de servicio" });
         }
     };
 
@@ -60,37 +63,36 @@ export default class reservasSalones{
         try {
             const { id } = req.params;
             const { fecha, salon_id, servicio_id, cliente } = req.body;
-
-            const sql = "UPDATE reservas_servicios SET fecha=?, salon_id=?, servicio_id=?, cliente=? WHERE id=? AND activo=1";
-            const [result] = await conexion.query(sql, [fecha, salon_id, servicio_id, cliente, id]);
+            const [result] = await this.reservasServicios.updateReservaServicio(id, {fecha, salon_id, servicio_id, cliente});
 
             if (result.affectedRows === 0) {
-            return res.status(404).json({ ok: false, mensaje: "Reserva del servicio creada" });
+            return res.status(404).json
+                ({ ok: false, mensaje: "Reserva del servicio creada" });
             }
 
-            res.json({ ok: true, mensaje: "" });
+            res.json({ estado: true, mensaje: "" });
+
         } catch (error) {
             console.log(error);
-            res.status(500).json({ ok: false, mensaje: "Error al crear la reserva de servicio" });
+            res.status(500).json
+                ({ estado: false, mensaje: "Error al crear la reserva de servicio" });
         }
     };
 
         // --------- DELETE 
     deleteRerservaServicio = async (req, res) => {
         try {
-            const { id } = req.params;
-            const sql = "UPDATE reservas_servicios SET activo=0 WHERE id=?";
-            const [result] = await conexion.query(sql, [id]);
+            const {id} = req.params;
+            const [result] = await this.reservasServicios.deleteRerservaServicio(id);
 
             if (result.affectedRows === 0) {
             return res.status(404).json({ ok: false, mensaje: "Reserva del servicio eliminado" });
             }
 
-            res.json({ ok: true, mensaje: "Error al eliminar servicio" });
+            res.json({ estado: true, mensaje: "Error al eliminar servicio" });
         } catch (error) {
             console.log(error);
             res.status(500).json({ ok: false, mensaje: "" });
         }
-    };
-
-
+}
+};
