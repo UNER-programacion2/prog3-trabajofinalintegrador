@@ -6,7 +6,7 @@ export default class salonesServicios{
         this.salones = new salonesDb();
     }
     //obtener todos los salones
-    getSalones = () => {
+    getAllSalones = () => {
         return this.salones.getSalones();
     }
 
@@ -16,17 +16,17 @@ export default class salonesServicios{
     }   
 
     //crear nuevo salon
-    postSalones = (data) => {
-        return this.salones.postSalon(data);
+    createSalones = (data) => {
+        return this.salones.createSalon(data);
     }
     
     //modificar
-    putSalones = (salon_id, data) => {
+    editSalones = (salon_id, data) => {
         const exist = this.salones.getSalonConId(salon_id);
         if (!exist){
             return null
         }
-        return this.salones.putSalon(salon_id, data);
+        return this.salones.editSalon(salon_id, data);
     }
 
     //eliminar

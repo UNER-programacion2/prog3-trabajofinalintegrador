@@ -14,13 +14,13 @@ export default class salonesDb{
         return results;
     }
 
-    postSalon = async ({titulo, direccion, capacidad, importe})=>{ 
+    createSalon = async ({titulo, direccion, capacidad, importe})=>{ 
         const sql = 'INSERT INTO salones (titulo, direccion, capacidad, importe) VALUES (?,?,?,?)';
         const [result]= await conexion.execute(sql, [titulo, direccion, capacidad, importe]);
         return result;
     }
 
-    putSalon = async(salon_id, { titulo, direccion, capacidad, importe }) => {
+    editSalon = async(salon_id, { titulo, direccion, capacidad, importe }) => {
         const sql = `UPDATE salones SET titulo = ?, direccion = ?, capacidad = ?, importe = ? WHERE salon_id = ? AND activo = 1`;
         const [results] = await conexion.execute(sql,[titulo, direccion, capacidad, importe, salon_id]);
         return results;

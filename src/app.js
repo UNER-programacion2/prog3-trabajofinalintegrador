@@ -1,6 +1,5 @@
-
 import express from 'express';
-import { usuariosRouter } from './routes/usuarios.js';
+import { usuariosRouter } from './routes/usuariosR.js';
 import { salonesRouter } from './routes/salonesR.js';
 import serviciosRouter from './routes/serviciosR.js';
 import turnosRouter from './routes/turnosR.js';

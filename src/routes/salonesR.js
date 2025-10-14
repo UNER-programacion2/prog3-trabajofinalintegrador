@@ -1,7 +1,6 @@
 import express from 'express';
 import apicache from 'apicache';
 import { check } from 'express-validator';
-
 import { validarCampos } from '../middleware/validarCampos.js';
 import salonesController from '../controllers/salones.js'; 
 
@@ -18,7 +17,7 @@ salonesRouter.post('/',
     check('importe', 'El importe es necesario.').notEmpty(), 
     validarCampos
     ],
-    controller.postSalon);
+    controller.createSalon);
 salonesRouter.put('/:salon_id', 
     [ check('titulo', 'El titulo no puede estar vacio.').notEmpty(),
     check('direccion', 'La direccion es necesaria.').notEmpty(),
@@ -26,7 +25,7 @@ salonesRouter.put('/:salon_id',
     check('importe', 'El importe es necesario.').notEmpty(), 
     validarCampos],
    
-    controller.putSalon);
+    controller.editSalon);
 salonesRouter.delete('/:salon_id', controller.deleteSalon);
 
 export { salonesRouter };
