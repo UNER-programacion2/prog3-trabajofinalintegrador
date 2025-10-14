@@ -1,36 +1,37 @@
-import salonesDb from "../db/reservasServiciosDb.js";
+import reservasServiciosDb from "../db/reservasServiciosDb.js";
 
 export default class salonesServicios{
 
     constructor(){
-        this.reservaServicio = new reservaServicio();
+        this.reservaServicio = new reservasServiciosDb();
     }
     //obtener todos los salones
     getAllReservasServicios = () => {
-        return this.reservaServicio.getAllReservasServicios();
+        return this.reservaServicio.getReservasServicios();
     }
 
     //obtener mediante el id
     getReservaServicioConId = (reserva_servicio_id) => {
-        return this.reservaServicio.getReservaServicioConId(reserva_servicio_id);
+        return this.reservaServicio.getReservasServiciosId(reserva_servicio_id);
     }   
 
     //crear nuevo salon
-    createReservaServicio = (data) => {
-        return this.reservaServicio.createReservaServicio(data);
+    addServicioReserva = async (data) => {
+        return await this.reservaServicio.postReservasServicios(data);
     }
     
+    
     //modificar
-    editReservaServicio = (reserva_servicio_id, data) => {
-        const exist = this.reservaServicio.getReservaServicioConId(reserva_servicio_id);
+    updateReservaServicio = (reserva_servicio_id, data) => {
+        const exist = this.reservaServicio.getReservasServiciosId(reserva_servicio_id);
         if (!exist){
             return null
         }
-        return this.reservaServicio.editReservaServicio(reserva_servicio_id, data);
+        return this.reservaServicio.putReservasServicios(reserva_servicio_id, data);
     }
 
     //eliminar
-    deleteReservaServicio = (reserva_servicio_id) => {
-        return this.reservaServicio.deleteReservaServicio(reserva_servicio_id);
-    }
+    // deleteReservaServicio = (reserva_servicio_id) => {
+    //     return this.reservaServicio.deleteReservasServicios(reserva_servicio_id);
+    // }
 }

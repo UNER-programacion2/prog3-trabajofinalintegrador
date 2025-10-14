@@ -25,7 +25,7 @@ export default class reservasServiciosController{
     // GET BY ID  
      getReservaServicioConId = async (req, res) => {
         try {
-            const id = req.params;
+            const id = req.params.id;
             const reserva_servicio = await this.reservasServicios.getReservaServicioConId(id);
 
             if (!reserva_servicio) {
@@ -46,11 +46,14 @@ export default class reservasServiciosController{
     // POST 
     addServicioReserva = async (req, res) => {
         try {
-            const { fecha, salon_id, servicio_id, cliente } = req.body;
-            const [result] = await this.reservasServicios.addServicioReserva({fecha, salon_id, servicio_id, cliente});
+            const { reserva_id, servicio_id, importe } = req.body;
+            const result = await this.reservasServicios.addServicioReserva
+            ({reserva_id, 
+                servicio_id, 
+                importe});
 
             res.json
-                ({ ok: true, id: result.insertId, fecha, salon_id, servicio_id, cliente });
+                ({ ok: true, idReserva: result.insertId, servicio : result.servicio_id, reserva :result.reserva_id });
         } catch (error) {
 
             console.log(error);
@@ -62,15 +65,21 @@ export default class reservasServiciosController{
     updateReservaServicio = async (req, res) => {
         try {
             const { id } = req.params;
-            const { fecha, salon_id, servicio_id, cliente } = req.body;
-            const [result] = await this.reservasServicios.updateReservaServicio(id, {fecha, salon_id, servicio_id, cliente});
+            const { reserva_id, servicio_id, importe } = req.body;
+            const result = await this.reservasServicios.updateReservaServicio(id, {reserva_id, servicio_id, importe});
 
-            if (result.affectedRows === 0) {
+            if (reserva_id === undefined || servicio_id === undefined || importe === undefined) {
             return res.status(404).json
-                ({ ok: false, mensaje: "Reserva del servicio creada" });
+                ({ ok: false, mensaje: "Debe enviar reserva_id, servicio_id e importe" });
             }
 
-            res.json({ estado: true, mensaje: "" });
+            if (result.affectedRows === 0) {
+            return res.status(404).json({
+                ok: false,
+                mensaje: "No se encontro la reserva de servicio"
+            });
+        }
+            res.json({ estado: true, mensaje: "Reserva de servicio actualizada correctamente" });
 
         } catch (error) {
             console.log(error);
@@ -80,19 +89,19 @@ export default class reservasServiciosController{
     };
 
         // --------- DELETE 
-    deleteRerservaServicio = async (req, res) => {
-        try {
-            const {id} = req.params;
-            const [result] = await this.reservasServicios.deleteRerservaServicio(id);
+//     deleteRerservaServicio = async (req, res) => {
+//         try {
+//             const {id} = req.params;
+//             const [result] = await this.reservasServicios.deleteRerservaServicio(id);
 
-            if (result.affectedRows === 0) {
-            return res.status(404).json({ ok: false, mensaje: "Reserva del servicio eliminado" });
-            }
+//             if (result.affectedRows === 0) {
+//             return res.status(404).json({ ok: false, mensaje: "Reserva del servicio eliminado" });
+//             }
 
-            res.json({ estado: true, mensaje: "Error al eliminar servicio" });
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ ok: false, mensaje: "" });
-        }
-}
+//             res.json({ estado: true, mensaje: "Error al eliminar servicio" });
+//         } catch (error) {
+//             console.log(error);
+//             res.status(500).json({ ok: false, mensaje: "" });
+//         }
+// }
 };
