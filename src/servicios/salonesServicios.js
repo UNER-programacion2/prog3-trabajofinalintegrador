@@ -16,21 +16,21 @@ export default class salonesServicios{
     }   
 
     //crear nuevo salon
-    createSalones = (data) => {
+    createSalon = (data) => {
         return this.salones.createSalon(data);
     }
     
     //modificar
-    editSalones = (salon_id, data) => {
+    editSalon = (salon_id, datos) => {
         const exist = this.salones.getSalonConId(salon_id);
         if (!exist){
             return null
         }
-        return this.salones.editSalon(salon_id, data);
+        return this.salones.editSalon(salon_id, datos);
     }
 
     //eliminar
-    deleteSalones = (salon_id) => {
+    deleteSalon = (salon_id) => {
         return this.salones.deleteSalon(salon_id);
     }
 

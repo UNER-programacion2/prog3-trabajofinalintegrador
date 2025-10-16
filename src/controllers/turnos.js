@@ -15,9 +15,9 @@ const getTurnos = async (req, res) => {
 // GET BY ID  
 const getTurnoConId = async (req, res) => {
     try {
-        const { id } = req.params;
-        const sql = "SELECT * FROM turnos WHERE id = ? AND activo = 1";
-        const [results] = await conexion.query(sql, [id]);
+        const { turno_id} = req.params;
+        const sql = "SELECT * FROM turnos WHERE turno_id = ? AND activo = 1";
+        const [results] = await conexion.query(sql, [turno_id]);
 
         if (results.length === 0) {
         return res.status(404).json({ ok: false, mensaje: "Turno no encontrado" });
@@ -33,11 +33,11 @@ const getTurnoConId = async (req, res) => {
     // POST 
     const addTurno = async (req, res) => {
     try {
-        const { fecha, salon_id, servicio_id, cliente } = req.body;
-        const sql = "INSERT INTO turnos (fecha, salon_id, servicio_id, cliente, activo) VALUES (?, ?, ?, ?, 1)";
-        const [result] = await conexion.query(sql, [fecha, salon_id, servicio_id, cliente]);
+        const { orden, hora_desde, hora_hasta } = req.body;
+        const sql = "INSERT INTO `turnos` (`orden`,`hora_desde`,`hora_hasta`,`activo`,`creado`) VALUES (?, ?, ?, 1, NOW())";
+        const [result] = await conexion.query(sql, [orden, hora_desde, hora_hasta]);
 
-        res.json({ ok: true, id: result.insertId, fecha, salon_id, servicio_id, cliente });
+        res.json({ ok: true, id: result.insertId, orden, hora_desde, hora_hasta });
     } catch (error) {
         console.log(error);
         res.status(500).json({ ok: false, mensaje: "Error al crear turno" });
@@ -47,12 +47,11 @@ const getTurnoConId = async (req, res) => {
     // PUT 
     const updateTurno = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { fecha, salon_id, servicio_id, cliente } = req.body;
+        const { turno_id } = req.params;
+        const { orden, hora_desde, hora_hasta } = req.body;
 
-        const sql = "UPDATE turnos SET fecha=?, salon_id=?, servicio_id=?, cliente=? WHERE id=? AND activo=1";
-        const [result] = await conexion.query(sql, [fecha, salon_id, servicio_id, cliente, id]);
-
+        const sql = "UPDATE `turnos` SET `orden` = ?, `hora_desde` = ?, `hora_hasta` = ?, `modificado` = NOW() WHERE `turno_id` = ? AND `activo` = 1";
+        const [result] = await conexion.query(sql, [orden, hora_desde, hora_hasta, turno_id]);
         if (result.affectedRows === 0) {
         return res.status(404).json({ ok: false, mensaje: "Turno no encontrado" });
         }
@@ -67,9 +66,9 @@ const getTurnoConId = async (req, res) => {
     // --------- DELETE 
     const deleteTurno = async (req, res) => {
     try {
-        const { id } = req.params;
-        const sql = "UPDATE turnos SET activo=0 WHERE id=?";
-        const [result] = await conexion.query(sql, [id]);
+        const { turno_id } = req.params;
+        const sql = "UPDATE turnos SET activo=0 WHERE turno_id=?";
+        const [result] = await conexion.query(sql, [turno_id]);
 
         if (result.affectedRows === 0) {
         return res.status(404).json({ ok: false, mensaje: "Turno no encontrado" });
