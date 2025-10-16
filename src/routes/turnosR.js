@@ -4,9 +4,9 @@ import { getTurnos, getTurnoConId, addTurno, updateTurno, deleteTurno } from '..
 const turnosRouter = express.Router();
 
 turnosRouter.get('/', getTurnos);
-turnosRouter.get('/turnos/:id', getTurnoConId);
-turnosRouter.post('/turnos', addTurno);
-turnosRouter.put('/turnos/:id', updateTurno);
-turnosRouter.delete('/turnos/:id', deleteTurno);
+turnosRouter.get('/:turno_id', getTurnoConId);
+turnosRouter.post('/', addTurno);
+turnosRouter.put('/:turno_id', updateTurno);
+turnosRouter.delete('/:turno_id', deleteTurno);
 
 export default turnosRouter ;
