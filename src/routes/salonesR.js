@@ -7,15 +7,20 @@ import { cacheMinutes} from '../middleware/cache.js';
 const salonesRouter = express.Router();
 const controller = new salonesController();
 
-salonesRouter.get('/',cacheMinutes,controller.getSalones);
-salonesRouter.get('/:salon_id',cacheMinutes, controller.getSalonConId);
+salonesRouter.get('/',
+    cacheMinutes,
+    controller.getSalones);
+
+salonesRouter.get('/:salon_id',
+    cacheMinutes, 
+    controller.getSalonConId);
 
 salonesRouter.post('/', 
     validarCreateSalon, 
     controller.createSalon,
 );
 
-salonesRouter.put('/', 
+salonesRouter.put('/:salon_id', 
     validarEditSalon,
     controller.editSalon,
 );
