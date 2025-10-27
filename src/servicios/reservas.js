@@ -1,21 +1,32 @@
-import reservasDb from "../db/reservasDb";
+import reservasDb from "../db/reservasDb.js";
 
-export default class reservasServicios{
-    constructor(){
-        this.reservas = new reservasDb();
-    }
+export default class reservasServicios {
+  constructor() {
+    this.reservas = new reservasDb();
+  }
 
-    getAllReservas = () => {
-        return this.reservas.getReservas();
-    }
+  // GET - obtener todas las reservas
+  getAllReservas = async () => {
+    return await this.reservas.getReservas();
+  };
 
-    getReservaConId = (reservas_id) =>{
-        return this.reservas.getReservasConId(reservas_id)
-    }
+  // GET BY ID - obtener una reserva por su id
+  getReservaConId = async (reserva_id) => {
+    return await this.reservas.getReservaConId(reserva_id);
+  };
 
-    postReserva = async (data) =>{
-        return await this.reservas.postReserva(data);
-    }
+  // POST - crear nueva reserva
+  createReserva = async (data) => {
+    return await this.reservas.postReserva(data);
+  };
 
-    putR
+  // PUT - editar reserva existente
+  editReserva = async (reserva_id, data) => {
+    return await this.reservas.putReserva(reserva_id, data);
+  };
+
+  // DELETE - eliminar (soft delete) reserva
+  deleteReserva = async (reserva_id) => {
+    return await this.reservas.deleteReserva(reserva_id);
+  };
 }
