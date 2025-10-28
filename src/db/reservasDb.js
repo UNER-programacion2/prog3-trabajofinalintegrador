@@ -21,7 +21,7 @@ export default class reservasDb{
             
             
             const sql = `INSERT INTO reservas (fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total)
-            VALUES (?, ?, ?, ?, ?,?,?)`
+            VALUES (?, ?, ?, ?, ? | null,?,?)`
 
             const [result] = await conexion.execute(sql, [
                 fecha_reserva,
@@ -42,7 +42,7 @@ export default class reservasDb{
     putReserva = async (reserva_id,{fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total }) =>{ 
         const sql = `
         UPDATE reservas
-        SET fecha_reserva = ?, salon_id = ?, usuario_id = ?, turno_id = ?, foto_cumplaniero = ?, tematica = ?, importe_total = ?
+        SET fecha_reserva = ?, salon_id = ?, usuario_id = ?, turno_id = ?, foto_cumpleaniero = ?, tematica = ?, importe_total = ?
         WHERE reserva_id = ? AND activo = 1
         `;
         
@@ -52,11 +52,21 @@ export default class reservasDb{
             salon_id,
             usuario_id,
             turno_id,
-            foto_cumpleaniero,
+            foto_cumpleaniero ?? null,
             tematica,
             importe_total,
             reserva_id
         ])
         return result;
-    }   
+    } 
+    
+    deleteReserva = async (reserva_id) => {
+        const sql = `
+        UPDATE reservas
+        SET activo = 0
+        WHERE reserva_id = ?
+        `;
+        const [result] = await conexion.execute(sql, [reserva_id]);
+        return result;
+    }
 }

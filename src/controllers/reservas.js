@@ -123,31 +123,57 @@ export default class ReservasController {
 
   // PUT - EDITAR RESERVA
   putReserva = async (req, res) => {
-    try {
-      const reserva_id = req.params.reserva_id;
-      const datos = req.body;
+  try {
+    const reserva_id = req.params.reserva_id;
+    const datos = req.body;
 
-      const reservaModificada = await this.ReservasServicios.editReserva(reserva_id, datos);
-
-      if (!reservaModificada) {
-        return res.status(404).json({
-          estado: false,
-          mensaje: 'Reserva no encontrada.'
-        });
-      }
-
-      res.status(200).json({
-        estado: true,
-        mensaje: `Reserva modificada con id ${reserva_id}`
-      });
-    } catch (error) {
-      console.log('Error en PUT /reservas/:reserva_id', error);
-      res.status(500).json({
+    if (!reserva_id || isNaN(reserva_id)) {
+      return res.status(400).json({
         estado: false,
-        mensaje: 'Error interno del servidor.'
+        mensaje: 'ID de reserva inválido.'
       });
     }
-  };
+
+    if (!Object.keys(datos).length) {
+      return res.status(400).json({
+        estado: false,
+        mensaje: 'No se enviaron datos para actualizar.'
+      });
+    }
+
+    const reservaModificada = await this.ReservasServicios.editReserva(reserva_id, datos);
+
+    if (!reservaModificada) {
+      return res.status(404).json({
+        estado: false,
+        mensaje: 'Reserva no encontrada.'
+      });
+    }
+
+    res.status(200).json({
+      estado: true,
+      mensaje: `Reserva modificada con ID ${reserva_id}`
+    });
+
+  } catch (error) {
+    console.log('Error en PUT /reservas/:reserva_id', error);
+
+    if (
+      error.message.includes('no existe') || 
+      error.message.includes('inválido')
+    ) {
+      return res.status(400).json({
+        estado: false,
+        mensaje: error.message
+      });
+    }
+
+    res.status(500).json({
+      estado: false,
+      mensaje: 'Error interno del servidor.'
+    });
+  }
+};
 
   // DELETE - ELIMINAR RESERVA (soft delete)
   deleteReserva = async (req, res) => {
