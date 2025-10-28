@@ -32,7 +32,13 @@ export default class reservasDb{
                 if (usuarioExiste.length === 0) {
                     throw new Error(`El usuario con ID ${usuario_id} no existe.`);
                 }
-                
+                const [turnoExiste] = await conexion.execute(
+                    "SELECT turno_id FROM turnos WHERE turno_id = ?",
+                    [turno_id]
+                );
+                if (turnoExiste.length === 0) {
+                    throw new Error(`El turno con ID ${turno_id} no existe.`);
+                }
             
             
             const sql = `INSERT INTO reservas (fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total)
