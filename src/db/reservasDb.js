@@ -25,8 +25,14 @@ export default class reservasDb{
                 if (salonExiste.length === 0) {
                     throw new Error(`El salón con ID ${salon_id} no existe.`);
                 }
-
-            
+                const [usuarioExiste] = await conexion.execute(
+                    "SELECT usuario_id FROM usuarios WHERE usuario_id = ? AND activo = 1",
+                    [usuario_id]
+                );
+                if (usuarioExiste.length === 0) {
+                    throw new Error(`El usuario con ID ${usuario_id} no existe.`);
+                }
+                
             
             
             const sql = `INSERT INTO reservas (fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total)
