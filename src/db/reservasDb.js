@@ -17,28 +17,7 @@ export default class reservasDb{
     postReserva = async ({fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total }) =>{
         
         try {
-                // Validar que existan los IDs en sus tablas
-                const [salonExiste] = await conexion.execute(
-                    "SELECT salon_id FROM salones WHERE salon_id = ? AND activo = 1",
-                    [salon_id]
-                );
-                if (salonExiste.length === 0) {
-                    throw new Error(`El salón con ID ${salon_id} no existe.`);
-                }
-                const [usuarioExiste] = await conexion.execute(
-                    "SELECT usuario_id FROM usuarios WHERE usuario_id = ? AND activo = 1",
-                    [usuario_id]
-                );
-                if (usuarioExiste.length === 0) {
-                    throw new Error(`El usuario con ID ${usuario_id} no existe.`);
-                }
-                const [turnoExiste] = await conexion.execute(
-                    "SELECT turno_id FROM turnos WHERE turno_id = ?",
-                    [turno_id]
-                );
-                if (turnoExiste.length === 0) {
-                    throw new Error(`El turno con ID ${turno_id} no existe.`);
-                }
+                
             
             
             const sql = `INSERT INTO reservas (fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total)
