@@ -62,48 +62,64 @@ export default class ReservasController {
 
   // POST - CREAR NUEVA RESERVA
   postReserva = async (req, res) => {
-    try {
-      const {
-        fecha_reserva,
-        salon_id,
-        usuario_id,
-        turno_id,
-        foto_cumpleaniero,
-        tematica,
-        importe_total
-      } = req.body;
+  try {
+    const {
+      fecha_reserva,
+      salon_id,
+      usuario_id,
+      turno_id,
+      foto_cumpleaniero,
+      tematica,
+      importe_total
+    } = req.body;
 
-      const reserva = {
-        fecha_reserva,
-        salon_id,
-        usuario_id,
-        turno_id,
-        foto_cumpleaniero,
-        tematica,
-        importe_total
-      };
-
-      const nuevaReserva = await this.ReservasServicios.createReserva(reserva);
-
-      if (!nuevaReserva) {
-        return res.status(400).json({
-          estado: false,
-          mensaje: 'Faltan campos requeridos o datos inválidos.'
-        });
-      }
-
-      res.status(201).json({
-        estado: true,
-        mensaje: `Reserva creada con id ${nuevaReserva.insertId}`
-      });
-    } catch (error) {
-      console.log('Error en POST /reservas', error);
-      res.status(500).json({
+    // Validar campos mínimos
+    if (!fecha_reserva || !salon_id || !usuario_id || !turno_id || !importe_total) {
+      return res.status(400).json({
         estado: false,
-        mensaje: 'Error interno del servidor.'
+        mensaje: 'Faltan campos requeridos.'
       });
     }
-  };
+
+    const reserva = {
+      fecha_reserva,
+      salon_id,
+      usuario_id,
+      turno_id,
+      foto_cumpleaniero,
+      tematica,
+      importe_total
+    };
+
+    // Intentar crear la reserva
+    const nuevaReserva = await this.ReservasServicios.createReserva(reserva);
+
+    res.status(201).json({
+      estado: true,
+      mensaje: `Reserva creada con ID ${nuevaReserva.insertId}`
+    });
+
+  } catch (error) {
+    console.log('Error en POST /reservas:', error);
+
+    //  servicio tira error con mensaje controlado (validación de FK)
+    if (
+      error.message.includes('no existe') || 
+      error.message.includes('inválido')
+    ) {
+      return res.status(400).json({
+        estado: false,
+        mensaje: error.message
+      });
+    }
+
+    //  error inesperado (fallo de DB, conexión)
+    res.status(500).json({
+      estado: false,
+      mensaje: 'Error interno del servidor.'
+    });
+  }
+};
 
   // PUT - EDITAR RESERVA
   putReserva = async (req, res) => {
