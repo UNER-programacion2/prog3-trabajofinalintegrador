@@ -49,6 +49,8 @@ export default class serviciosController {
             const data = { descripcion, importe };
             const result = await this.serviciosServicios.createServicio(data);
 
+            clearCache('/');
+
             res.status(201).json({
                 ok: true,
                 mensaje: 'Servicio creado',
@@ -70,6 +72,9 @@ export default class serviciosController {
             const datos = { descripcion, importe };
             const result = await this.serviciosServicios.editServicio(servicio_id, datos);
 
+            clearCache('/');
+            clearCache(`/salones/${servicio_id}`);
+
             if (!result) {
                 return res.status(404).json({ ok: false, mensaje: `No existe Servicio con ID ${servicio_id}` });
             }
@@ -87,6 +92,9 @@ export default class serviciosController {
             const { servicio_id } = req.params; 
 
             const result = await this.serviciosServicios.deleteServicio(servicio_id);
+
+            clearCache('/');
+            clearCache(`/salones/${servicio_id}`);
 
             if (result.affectedRows === 0) {
                 return res.status(404).json({ ok: false, mensaje: `No existe Servicio con ID ${servicio_id}` });

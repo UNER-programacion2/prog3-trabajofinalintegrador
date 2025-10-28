@@ -31,7 +31,7 @@ export default class reservasServiciosController{
     deleteRerservaServicio = async (req, res) => {
         try {
             const {id} = req.params;
-            const [result] = await this.reservasServicios.deleteRerservaServicio(id);
+            const [result] = await this.reservasServicios.deleteReservaServicio(id);
 
             if (result.affectedRows === 0) {
             return res.status(404).json({ ok: false, mensaje: "Reserva del servicio eliminado" });

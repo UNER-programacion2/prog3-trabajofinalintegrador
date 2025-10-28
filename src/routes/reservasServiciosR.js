@@ -9,36 +9,36 @@ const reservasServiciosR = express.Router();
 const controller = new reservasServiciosController();
 
 
-reservasServiciosR.get('/',
-  cacheMinutes,
-  controller.getReservasServicios
-);
+// reservasServiciosR.get('/',
+//   cacheMinutes,
+//   controller.getReservasServicios
+// );
 
 
 reservasServiciosR.post('/',
-  validarCreateReservaServicio,
-  controller.addServicioReserva
+      validarCreateReservaServicio,
+      controller.addServicioReserva
 );
 
 
 reservasServiciosR
-  .route('/:reserva_servicio_id')
-    .get(
-        validarId('reserva_servicio_id'),
-        cacheMinutes,
-        controller.getReservaServicioConId
-    )
+  // .route('/:reserva_servicio_id')
+  //   .get(
+  //       validarId('reserva_servicio_id'),
+  //       cacheMinutes,
+  //       controller.getReservaServicioConId
+  //   )
 
-    .put(
-        validarId('reserva_servicio_id'),
-        validarEditReservaServicio,
-        controller.updateReservaServicio
-    )
+    // .put(
+    //     validarId('reserva_servicio_id'),
+    //     validarEditReservaServicio,
+    //     controller.updateReservaServicio
+    // )
 
-    // .delete(
-    //     validarId,
-    //     controller.
-    // );
+    .delete(
+        validarId('reserva_servicio_id'),
+        controller.deleteRerservaServicio
+    );
 
 
 export { reservasServiciosR };

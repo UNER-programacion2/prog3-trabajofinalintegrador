@@ -1,7 +1,6 @@
 import express from 'express';
 
 import UsuariosController from '../controllers/usuarios.js';
-import { cacheMinutes} from '../middleware/cache.js';
 import { validarCreateUsuario, validarEditUsuario } from '../middleware/usuariosValidator.js';
 import { validarId } from '../middleware/validacionId.js'
 
@@ -12,7 +11,6 @@ const controller = new UsuariosController();
 
 // GET todos los usuarios
 usuariosRouter.get('/', 
-    cacheMinutes,
     controller.getUsuarios);
 
 // POST crear usuario
@@ -25,7 +23,6 @@ usuariosRouter.route('/:usuario_id')
     // GET usuario por ID
     .get( 
         validarId('usuario_id'),
-        cacheMinutes,
         controller.getUsuarioConId)
 
     // PUT actualizar usuario    
