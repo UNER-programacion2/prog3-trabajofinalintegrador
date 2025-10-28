@@ -1,5 +1,5 @@
 import reservasDb from "../db/reservasDb.js";
-
+import { validarFKsReserva } from "./validacionesFk.js";
 export default class reservasServicios {
   constructor() {
     this.reservas = new reservasDb();
@@ -17,11 +17,13 @@ export default class reservasServicios {
 
   // POST - crear nueva reserva
   createReserva = async (data) => {
+    await validarFKsReserva(data);
     return await this.reservas.postReserva(data);
   };
 
   // PUT - editar reserva existente
   editReserva = async (reserva_id, data) => {
+    await validarFKsReserva(data);
     return await this.reservas.putReserva(reserva_id, data);
   };
 

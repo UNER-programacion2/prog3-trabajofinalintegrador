@@ -1,5 +1,6 @@
 import express from 'express';
 import ReservasController from '../controllers/reservas.js';
+import { validarCreateReserva } from '../middleware/reservasValidaciones/reservasValidator.js';
 
 const reservasRouter = express.Router();
 const controller = new ReservasController();
@@ -8,7 +9,7 @@ const controller = new ReservasController();
 reservasRouter.get('/', controller.getReservas);
 
 // POST crear una nueva reserva
-reservasRouter.post('/', controller.postReserva);
+reservasRouter.post('/', validarCreateReserva, controller.postReserva);
 
 // Rutas con ID
 reservasRouter.route('/:reserva_id')
