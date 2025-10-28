@@ -17,33 +17,37 @@ export default class reservasDb{
     postReserva = async ({fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total }) =>{
         
         try {
-            // Validar que existan los IDs en sus tablas
-            const [salonExiste] = await conexion.execute(
-                "SELECT salon_id FROM salones WHERE salon_id = ? AND activo = 1",
-                [salon_id]
-            );
-            if (salonExiste.length === 0) {
-                throw new Error(`El salón con ID ${salon_id} no existe.`);
-            }
+                // Validar que existan los IDs en sus tablas
+                const [salonExiste] = await conexion.execute(
+                    "SELECT salon_id FROM salones WHERE salon_id = ? AND activo = 1",
+                    [salon_id]
+                );
+                if (salonExiste.length === 0) {
+                    throw new Error(`El salón con ID ${salon_id} no existe.`);
+                }
+
             
-        
-        
-        
-        const sql = `INSERT INTO reservas (fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total)
-        VALUES (?, ?, ?, ?, ?,?,?)`
+            
+            
+            const sql = `INSERT INTO reservas (fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total)
+            VALUES (?, ?, ?, ?, ?,?,?)`
 
-        const [result] = await conexion.execute(sql, [
-            fecha_reserva,
-            salon_id,
-            usuario_id,
-            turno_id,
-            foto_cumpleaniero,
-            tematica,
-            importe_total
-        ])
-        return result;
+            const [result] = await conexion.execute(sql, [
+                fecha_reserva,
+                salon_id,
+                usuario_id,
+                turno_id,
+                foto_cumpleaniero,
+                tematica,
+                importe_total
+            ])
+            return result;
+        }catch(error){
+            console.error("Error en postReserva:", error.message);
+            throw error;
+        }
     }
-
+    
     putReserva = async (reserva_id,{fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total }) =>{ 
         const sql = `
         UPDATE reservas
