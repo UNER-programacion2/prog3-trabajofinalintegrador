@@ -6,7 +6,7 @@ import reservaServicioServicios from "./reservaServiciosService.js";
 export default class reservasServicios {
   constructor() {
     this.reservas = new reservasDb();
-    this.reservaServicioServicios = reservaServicioServicios();
+    this.reservas_servicios = new reservaServicioServicios();
   }
 
   // GET - obtener todas las reservas
