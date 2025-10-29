@@ -1,7 +1,9 @@
 import express from 'express';
+
 import turnosController from '../controllers/turnos.js';
 import { cacheMinutes} from '../middleware/cache.js';
-//agregar validacion turnos
+import { validarCreateTurno, validarEditTurno } from '../middleware/turnosValidator.js';
+import { validarId } from '../middleware/validacionId.js'
 
 const turnosRouter = express.Router();
 const controller = new turnosController();
@@ -10,25 +12,31 @@ turnosRouter.get('/',
     cacheMinutes,
     controller.getTurnos
 );
-// get id
-turnosRouter.get('/:turno_id', 
-    cacheMinutes,
-    controller.getTurnoConId
-);
 
 // post
 turnosRouter.post('/', 
+    validarCreateTurno,
     controller.addTurno,
 );
 
-turnosRouter.put('/:turno_id', 
-    controller.updateTurno,
-);
 
-turnosRouter.delete('/:turno_id', 
-    controller.deleteTurno,
-);
+turnosRouter.route('/:turno_id')
+    // GET turno por ID
+    .get( 
+        validarId('turno_id'),
+        cacheMinutes,
+        controller.getTurnoConId)
 
+    // PUT turno  
+    .put( 
+        validarId('turno_id'),
+        validarEditTurno,
+        controller.updateTurno)
+
+    // DELETE turno          
+    .delete(
+        validarId('turno_id'),
+        controller.deleteTurno); 
 
 
 export {turnosRouter} ;
