@@ -70,7 +70,8 @@ export default class ReservasController {
       turno_id,
       foto_cumpleaniero,
       tematica,
-      importe_total
+      importe_total,
+      servicios
     } = req.body;
 
     // Validar campos mínimos
@@ -88,7 +89,8 @@ export default class ReservasController {
       turno_id,
       foto_cumpleaniero,
       tematica,
-      importe_total
+      importe_total,
+      servicios
     };
 
     // Intentar crear la reserva

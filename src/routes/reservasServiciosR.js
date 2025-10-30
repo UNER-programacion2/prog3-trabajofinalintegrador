@@ -14,7 +14,7 @@ reservasServiciosR.post('/',
 );
 
 
-reservasServiciosR.delete(
+reservasServiciosR.delete('/:id',
     validarId('reserva_servicio_id'),
     controller.deleteRerservaServicio
 );

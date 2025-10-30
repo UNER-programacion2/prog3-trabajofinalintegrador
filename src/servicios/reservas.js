@@ -21,21 +21,45 @@ export default class reservasServicios {
 
 
   // POST - crear nueva reserva 
-  createReserva = async (data) => {
-    await validarFKsReserva(data);
+  createReserva = async (reserva) => {
+    await validarFKsReserva(reserva);
     //return await this.reservas.postReserva(data);
 
-    const result = await this.reservas.postReserva(data);
+  const {
+          fecha_reserva,
+          salon_id,
+          usuario_id,
+          turno_id,
+          foto_cumpleaniero, 
+          tematica,
+          importe_salon,
+          importe_total,
+          servicios } = reserva;
+
+      const nuevaReserva = {
+          fecha_reserva,
+          salon_id,
+          usuario_id,
+          turno_id,
+          foto_cumpleaniero, 
+          tematica,
+          importe_salon,
+          importe_total
+        }    
+
+    const result = await this.reservas.postReserva(nuevaReserva);
 
     if (!result){
       return null
     }
     
     //relacion con servicios
-    if (data.servicios && data.servicios.length > 0) {
-      await this.reservas_servicios.crear(result.reserva_id, data.servicios);
-    }
-    return { ok: true, reserva_id: result.reserva_id };
+    // if (data.servicios && data.servicios.length > 0) {
+    //   await this.reservas_servicios.crear(result.reserva_id, data.servicios);
+    // }
+    await this.reservas_servicios.crear(result.reserva_id, servicios);
+    //return { ok: true, reserva_id: result.reserva_id };
+    return this.reservas.buscarPorId(result.reserva_id);
 
 };
 
