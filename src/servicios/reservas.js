@@ -6,7 +6,7 @@ import reservaServicioServicios from "./reservaServiciosService.js";
 export default class reservasServicios {
   constructor() {
     this.reservas = new reservasDb();
-    this.reservas_servicios = new reservaServicioServicios();
+    this.reservaServicioServicios = new reservaServicioServicios();
   }
 
   // GET - obtener todas las reservas
@@ -53,13 +53,9 @@ export default class reservasServicios {
       return null
     }
     
-    //relacion con servicios
-    // if (data.servicios && data.servicios.length > 0) {
-    //   await this.reservas_servicios.crear(result.reserva_id, data.servicios);
-    // }
-    await this.reservas_servicios.crear(result.reserva_id, servicios);
+    await this.reservaServicioServicios.addServicioReserva(result.insertId, servicios);
     //return { ok: true, reserva_id: result.reserva_id };
-    return this.reservas.buscarPorId(result.reserva_id);
+    return this.reservas.getReservaConId(result.insertId);
 
 };
 
