@@ -1,6 +1,6 @@
 import express from 'express';
 import reservasServiciosController from '../controllers/reservas_Servicios.js';
-import { validarCreateReservaServicio, validarEditReservaServicio } from '../middleware/serviciosReservasValidator.js';
+import { validarCreateReservaServicio } from '../middleware/serviciosReservasValidator.js';
 import { validarId } from '../middleware/validacionId.js'
 
 
@@ -15,7 +15,7 @@ reservasServiciosR.post('/',
 
 
 reservasServiciosR.delete('/:id',
-    validarId('reserva_servicio_id'),
+    validarId('id'),
     controller.deleteRerservaServicio
 );
 
