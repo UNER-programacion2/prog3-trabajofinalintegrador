@@ -15,10 +15,10 @@ const estrategia = new LocalSrategy({
           const usuarios = await userService.getUsuarios(nombre_usuario, contrasenia);
 
           if (!usuarios || usuarios.length === 0) {
-            return done(null, false, { message: 'Login incorrecto' });
+            return done(null, false, { mensaje: 'Login incorrecto' });
           }
           const usuario = usuarios[0];
-          return done(null, usuario, { message: 'Login correcto' });
+          return done(null, usuario, { mensaje: 'Login correcto' });
 
         } catch (error) {
           return done(error);
@@ -27,18 +27,20 @@ const estrategia = new LocalSrategy({
 })
 
 const validacion = new JwtStrategy({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SECRET,
-    },
-    async (jwtPayload, done) => {
-      const userService = new UsuariosServicios();
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), 
+    secretOrKey: process.env.JWT_SECRET 
 
+    },
+    async (jwtPayload, done) => { 
       try {
-        const usuario = await userService.getUsuarios(jwtPayload.usuario_id);
-        if (!usuario) {
-          return done(null, false, { mensaje: 'Token incorrecto!'});
+        const userService = new UsuariosServicios();
+        const usuario = await userService.getUsuarioConId(jwtPayload.usuario_id);
+
+        if (!usuario || usuario.length === 0) {
+          return done(null, false, { mensaje: 'Token incorrecto'});
         }
-          return done(null, usuario);
+        return done(null, usuario);
+
       } catch (error) {
         return done(error, false);
       }

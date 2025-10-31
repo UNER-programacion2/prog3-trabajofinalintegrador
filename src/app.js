@@ -35,7 +35,7 @@ app.use('/api/servicios', serviciosRouter);
 app.use('/api/turnos', turnosRouter);
 app.use('/api/notificacion', emailRouter);
 app.use('/api/reservas_servicios', reservasServiciosR);
-app.use('/api/reservas',reservasRouter, passport.authenticate( 'jwt', { session:false }));
+app.use('/api/reservas',reservasRouter);
 app.use('/api/auth', authRouter);
 
 
