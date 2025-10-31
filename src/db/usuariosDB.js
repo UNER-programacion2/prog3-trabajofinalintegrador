@@ -1,16 +1,35 @@
 import { conexion } from "./conexion.js";
 
 export default class UsuariosDb {
-  // GET: todos los usuarios activos
-  getUsuarios = async () => {
-    const sql = "SELECT * FROM usuarios WHERE activo = 1";
-    const [rows] = await conexion.execute(sql);
+
+  // GET: busca en la db
+  getUsuarios = async (nombre_usuario, contrasenia) => {
+    const sql = `SELECT u.usuario_id, CONCAT(u.nombre, ' ', u.apellido) as usuario, u.tipo_usuario
+                    FROM usuarios  AS u
+                    WHERE u.nombre_usuario = ? 
+                      AND u.contrasenia = SHA2(?, 256) 
+                      AND u.activo = 1
+                      `;
+    const [rows] = await conexion.execute(sql,[nombre_usuario, contrasenia]);
     return rows;
   };
+  
+  getAllUsuarios = async () => {
+      const sql = `SELECT u.usuario_id, CONCAT(u.nombre, ' ', u.apellido) as usuario, u.tipo_usuario
+                      FROM usuarios  AS u
+                      WHERE u.activo = 1
+                      `;
+      const [rows] = await conexion.execute(sql);
+      return rows;
+    };
+
 
   // GET: usuario por ID
   getUsuarioConId = async (usuario_id) => {
-    const sql = "SELECT * FROM usuarios WHERE usuario_id = ? AND activo = 1";
+    const sql = `SELECT CONCAT(u.nombre, ' ', u.apellido) as usuario, u.tipo_usuario, u.usuario_id
+                        FROM usuarios  AS u
+                        WHERE u.usuario_id = ? AND u.activo = 1
+                        `;
     const [rows] = await conexion.execute(sql, [usuario_id]);
     return rows;
   };
@@ -19,7 +38,7 @@ export default class UsuariosDb {
   postUsuario = async ({ nombre, apellido, nombre_usuario, contrasenia, tipo_usuario }) => {
     const sql = `
       INSERT INTO usuarios (nombre, apellido, nombre_usuario, contrasenia, tipo_usuario)
-      VALUES (?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, SHA2(?, 256), ?)
     `;
     const [result] = await conexion.execute(sql, [
       nombre,
@@ -35,7 +54,7 @@ export default class UsuariosDb {
   putUsuario = async (usuario_id, { nombre, apellido, nombre_usuario, contrasenia, tipo_usuario }) => {
     const sql = `
       UPDATE usuarios
-      SET nombre = ?, apellido = ?, nombre_usuario = ?, contrasenia = ?, tipo_usuario = ?
+      SET nombre = ?, apellido = ?, nombre_usuario = ?,contrasenia = SHA2(?, 256), tipo_usuario = ?
       WHERE usuario_id = ? AND activo = 1
     `;
     const [result] = await conexion.execute(sql, [

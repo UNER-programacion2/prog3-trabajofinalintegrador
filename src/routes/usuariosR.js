@@ -11,7 +11,7 @@ const controller = new UsuariosController();
 
 // GET todos los usuarios
 usuariosRouter.get('/', 
-    controller.getUsuarios);
+    controller.getAllUsuarios);
 
 // POST crear usuario
 usuariosRouter.post('/',
