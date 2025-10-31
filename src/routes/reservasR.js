@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from 'passport';
 
 import ReservasController from '../controllers/reservas.js';
 import { validarCreateReserva } from '../middleware/reservasValidaciones/reservasValidator.js';
@@ -9,28 +10,34 @@ const controller = new ReservasController();
 
 // GET todas las reservas
 reservasRouter.get('/', 
-    autorizarUsuarios([1,2,3]),
+    passport.authenticate('jwt', { session: false }),
+    autorizarUsuarios(1,2,3),
     controller.getReservas);
 
 // POST crear una nueva reserva
 reservasRouter.post('/', 
-    autorizarUsuarios([1,3]),
+    passport.authenticate('jwt', { session: false }),
+    autorizarUsuarios(1,3),
     validarCreateReserva, 
     controller.postReserva);
 
 // Rutas con ID
 reservasRouter.route('/:reserva_id')
+// GET reserva por ID
     .get(
-        autorizarUsuarios([1,3]),
+        passport.authenticate('jwt', { session: false }),
+        autorizarUsuarios(1,3),
         controller.getReservaConId) 
-          // GET reserva por ID
-    .put(
-        autorizarUsuarios([1]),
+// PUT actualizar reserva          
+    .put( 
+        passport.authenticate('jwt', { session: false }),
+        autorizarUsuarios(1),
         controller.putReserva) 
-               // PUT actualizar reserva
+// DELETE eliminar reserva              
     .delete(
-        autorizarUsuarios([1]),
-        controller.deleteReserva); // DELETE eliminar reserva
+        passport.authenticate('jwt', { session: false }),
+        autorizarUsuarios(1),
+        controller.deleteReserva); 
 
 export { reservasRouter };
 

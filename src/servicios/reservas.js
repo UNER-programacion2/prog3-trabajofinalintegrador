@@ -3,6 +3,7 @@ import { validarFKsReserva } from "./validacionesFk.js";
 import reservaServicioServicios from "./reservaServiciosService.js";
 
 
+
 export default class reservasServicios {
   constructor() {
     this.reservas = new reservasDb();
@@ -10,8 +11,14 @@ export default class reservasServicios {
   }
 
   // GET - obtener todas las reservas
-  getAllReservas = async () => {
-    return await this.reservas.getReservas();
+  getAllReservas = async (usuario) => {
+    if (usuario.tipo_usuario < 3){
+      return this.reservas.getReservas();
+    }
+    else{
+      return this.reservas.getPropiasReservas(usuario.usuario_id)
+    }
+   
   };
 
   // GET BY ID - obtener una reserva por su id
@@ -23,8 +30,7 @@ export default class reservasServicios {
   // POST - crear nueva reserva 
   createReserva = async (reserva) => {
     await validarFKsReserva(reserva);
-    //return await this.reservas.postReserva(data);
-
+  
   const {
           fecha_reserva,
           salon_id,

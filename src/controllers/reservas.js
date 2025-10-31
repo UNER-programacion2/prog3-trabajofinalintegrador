@@ -10,8 +10,15 @@ export default class ReservasController {
   // GET - OBTENER TODAS LAS RESERVAS
   getReservas = async (req, res) => {
     try {
-      const reservas = await this.ReservasServicios.getAllReservas();
+      const usuarioArray = req.user;
+      if (!usuarioArray || usuarioArray.length === 0) {
+            return res.status(401).json({ estado: false, mensaje: 'Usuario no autenticado.' });
+        }
+      const usuario = usuarioArray[0];
+
+      const reservas = await this.ReservasServicios.getAllReservas(usuario);
       res.json({ estado: true, datos: reservas });
+      
     } catch (error) {
       console.log('Error en GET /reservas', error);
       res.status(500).json({
@@ -98,7 +105,7 @@ export default class ReservasController {
 
     res.status(201).json({
       estado: true,
-      mensaje: `Reserva creada con ID ${nuevaReserva.insertId}`
+      mensaje: `Reserva creada con ID ${nuevaReserva.usuario_id}`
     });
 
   } catch (error) {
