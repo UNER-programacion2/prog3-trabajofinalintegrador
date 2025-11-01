@@ -2,6 +2,13 @@ import { conexion } from "./conexion.js";
 
 export default class reservasDb{
 
+    
+    getPropiasReservas = async(usuario_id) => {
+        const sql = 'SELECT * FROM reservas WHERE activo = 1 AND usuario_id = ?';
+        const [reservas] = await conexion.execute(sql, [usuario_id]);
+        return reservas;
+    }
+   
     getReservas = async() =>{
         const sql = "SELECT r.reserva_id, r.fecha_reserva, r.salon_id, s.titulo AS nombre_salon, r.usuario_id, CONCAT(u.nombre, ' ', u.apellido) AS usuario, t.hora_desde, t.hora_hasta, r.tematica, r.importe_total FROM reservas AS r JOIN salones AS s ON r.salon_id = s.salon_id JOIN usuarios AS u ON r.usuario_id = u.usuario_id JOIN turnos as t ON r.turno_id = t.turno_id where r.activo = 1";
         const [rows] = await conexion.execute(sql);
@@ -58,6 +65,9 @@ export default class reservasDb{
             reserva_id
         ])
         return result;
+       
+
+
     } 
     
     deleteReserva = async (reserva_id) => {
