@@ -19,7 +19,8 @@ salonesRouter.get('/',
 
 
 salonesRouter.post('/', 
-    validarCreateSalon, 
+    validarCreateSalon,
+    autorizarUsuarios(1,2), 
     controller.createSalon,
 );
 
@@ -27,16 +28,19 @@ salonesRouter.post('/',
 salonesRouter.route('/:salon_id')
     .get(
         validarId('salon_id'),
-        cacheMinutes, 
+        cacheMinutes,
+        autorizarUsuarios(1,2),
         controller.getSalonConId)
 
     .put(
         validarId('salon_id'),
         validarEditSalon,
+        autorizarUsuarios(1,2),
         controller.editSalon)
 
     .delete(
         validarId('salon_id'),
+        autorizarUsuarios(1,2),
         controller.deleteSalon)
 
 

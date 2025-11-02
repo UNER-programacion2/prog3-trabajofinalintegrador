@@ -8,7 +8,7 @@ export default class LoginController {
       if (err || !usuario) {
         return res.status(400).json
         ({estado: false,
-          mensaje:"Solicitud incorrecta."
+          mensaje: info
         });
       }
 
