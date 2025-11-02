@@ -1,4 +1,5 @@
 
+import { usuariosRouter } from "../routes/usuariosR.js";
 import UsuariosServicios from "../servicios/usuariosServicios.js";
 
 export default class UsuariosController {
@@ -17,6 +18,18 @@ export default class UsuariosController {
     }
   };
 
+
+  getAllUsuarios = async (req, res) => {
+    try {
+      const usuarios = await this.UsuariosServicios.getAllUsuarios(); 
+      res.status(200).json(usuarios);
+
+    } catch (error) {
+      console.error("Error en GET /usuarios", error);
+      res.status(500).json({ message: "Error al obtener los usuarios." });
+     }
+  };
+ 
   // GET /usuarios/:usuario_id
   getUsuarioConId = async (req, res) => {
     try {

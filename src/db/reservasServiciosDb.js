@@ -1,32 +1,38 @@
 import {conexion} from "./conexion.js";
 
 export default class reservasServiciosDb{
+    
+    getServiciosConDetalle = async (reserva_id) => {
+        const sql = `
+        SELECT rs.reserva_servicio_id, s.servicio_id, s.descripcion, rs.importe
+        FROM reservas_servicios AS rs
+        JOIN servicios AS s ON rs.servicio_id = s.servicio_id
+        WHERE rs.reserva_id = ?
+        `;
+        const [rows] = await conexion.execute(sql, [reserva_id]);
+        return rows;
+    };
 
-    // getReservasServicios = async() => {
-    //     const sql = 'SELECT * FROM reservas_servicios';
-    //     const [rows] = await conexion.query(sql);
-    //     return rows;
-    // }
+    postReservasServicios = async (reserva_id, servicios)=>{
 
-    // getReservasServiciosId = async (reserva_servicio_id) => {
-    //     const sql = `SELECT * FROM reservas_servicios WHERE reserva_servicio_id = ?`;
-    //     const [results] = await conexion.execute(sql,[reserva_servicio_id]);
-    //     return results;
-    // }
+        try{
+            await conexion.beginTransaction();
 
-    postReservasServicios = async ({reserva_id, servicio_id, importe})=>{
-        console.log(reserva_id, servicio_id, importe);
-        
-        const sql = 'INSERT INTO reservas_servicios (reserva_id, servicio_id, importe) VALUES (?,?,?)';
-        const [result]= await conexion.execute(sql, [reserva_id, servicio_id, importe]);
-        return result;
+            for (const servicio of servicios){
+                const sql = `INSERT INTO reservas_servicios (reserva_id, servicio_id, importe)
+                VALUES (?,?,?);`;
+                await conexion.execute(sql, [reserva_id, servicio.servicio_id, servicio.importe ]);
+            }
+            await conexion.commit();
+            return true;
+
+        }catch(error){
+            await conexion.rollback();
+            console.log(`error ${error}`);
+            return false;
+        }
+    
     }
-
-    // putReservasServicios = async(reserva_servicio_id, { reserva_id, servicio_id, importe}) => {
-    //     const sql = `UPDATE reservas_servicios SET reserva_id = ?, servicio_id = ?, importe = ? WHERE reserva_servicio_id = ?`;
-    //     const [results] = await conexion.execute(sql,[reserva_id, servicio_id, importe, reserva_servicio_id]);
-    //     return results;
-    // }
 
     deleteReservasServicios = async(reserva_servicio_id) => {
         const sql= `DELETE FROM reservas_servicios WHERE reserva_servicio_id = ? `;

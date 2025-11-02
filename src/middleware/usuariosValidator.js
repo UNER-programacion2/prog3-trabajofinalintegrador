@@ -24,7 +24,7 @@ export const validarCreateUsuario = [
 
     check('tipo_usuario')
         .not().isEmpty().withMessage("El tipo_usuario es obligatorio.")
-        .isString().withMessage("Debe ser una cadena de texto."),
+        .isInt().withMessage("El tipo_usuario debe ser un número"),
     
     validarCampos
     
@@ -57,7 +57,7 @@ export const validarEditUsuario = [
     check('tipo_usuario')
         .optional()
         .not().isEmpty().withMessage("El tipo_usuario no puede estar vacío.")
-        .isString().withMessage("Debe ser una cadena de texto."),
+        .isInt().withMessage("El tipo_usuario debe ser un número"),
     
     validarCampos
 

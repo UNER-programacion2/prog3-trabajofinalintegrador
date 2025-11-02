@@ -7,47 +7,16 @@ export const validarCreateReservaServicio = [
     .not().isEmpty().withMessage("El campo 'reserva_id' es obligatorio.")
     .isInt({ gt: 0 }).withMessage("El campo 'reserva_id' debe ser un número entero positivo."),
 
-  check('servicio_id')
-    .not().isEmpty().withMessage("El campo 'servicio_id' es obligatorio.")
-    .isInt({ gt: 0 }).withMessage("El campo 'servicio_id' debe ser un número entero positivo."),
+  check('servicios') 
+    .isArray({ min: 1 }).withMessage("Debe incluir un array 'servicios' con al menos un servicio."),
 
-  check('cantidad')
-    .optional({ checkFalsy: true })
-    .isInt({ gt: 0 }).withMessage("La cantidad debe ser un número entero positivo."),
+  check('servicios.*.servicio_id')
+    .not().isEmpty().withMessage("Cada servicio debe tener un 'servicio_id' obligatorio.")
+    .isInt({ gt: 0 }).withMessage("El 'servicio_id' debe ser un número entero positivo."),
 
-  check('importe')
-    .optional({ checkFalsy: true })
-    .isFloat({ gt: 0 }).withMessage("El importe debe ser un número positivo."),
-
-  check('activo')
-    .optional()
-    .isBoolean().withMessage("El campo 'activo' debe ser verdadero o falso (true/false, 1/0)."),
-
-  validarCampos
-];
-
-
-// editar resrva_servicio
-export const validarEditReservaServicio = [
-  check('reserva_id')
-    .optional({ checkFalsy: true })
-    .isInt({ gt: 0 }).withMessage("El campo 'reserva_id' debe ser un número entero positivo."),
-
-  check('servicio_id')
-    .optional({ checkFalsy: true })
-    .isInt({ gt: 0 }).withMessage("El campo 'servicio_id' debe ser un número entero positivo."),
-
-  check('cantidad')
-    .optional({ checkFalsy: true })
-    .isInt({ gt: 0 }).withMessage("La cantidad debe ser un número entero positivo."),
-
-  check('importe')
-    .optional({ checkFalsy: true })
-    .isFloat({ gt: 0 }).withMessage("El importe debe ser un número positivo."),
-
-  check('activo')
-    .optional()
-    .isBoolean().withMessage("El campo 'activo' debe ser verdadero o falso (true/false, 1/0)."),
+  check('servicios.*.importe')
+    .not().isEmpty().withMessage("Cada servicio debe tener un 'importe' obligatorio.")
+    .isFloat({ gt: 0 }).withMessage("El 'importe' debe ser un número positivo."),
 
   validarCampos
 ];

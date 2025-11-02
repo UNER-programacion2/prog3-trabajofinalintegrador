@@ -18,39 +18,42 @@ export const validarCreateReserva = [
     .notEmpty().withMessage('El ID del turno es obligatorio.')
     .isInt({ gt: 0 }).withMessage('El ID del turno debe ser un número entero positivo.'),
 
-  // //check('servicio_id') 
-  //   .notEmpty().withMessage('El ID del servicio es obligatorio.')
-  //   .isInt({ gt: 0 }).withMessage('El ID del servicio debe ser un número entero positivo.'),
-
-
-  check('servicios')
-    .notEmpty().withMessage('La lista de servicios es obligatoria.')
-    .isArray({ min: 1 }).withMessage('Debe proporcionar al menos un servicio.'),
-
-  check('servicios.*.importe')
-    .isFloat().withMessage('El importe del servicio debe ser un número válido.'),
-    
   check('importe_total')
     .notEmpty().withMessage('El importe total es obligatorio.')
     .isFloat({ gt: 0 }).withMessage('El importe total debe ser un número positivo.'),
+
+  check('servicios') 
+    .isArray({ min: 1 }).withMessage("Debe incluir un array servicios con al menos un servicio."),
+
+check('servicios.*.servicio_id')
+    .not().isEmpty().withMessage("servicio_id es obligatorio.")
+    .isInt({ gt: 0 }).withMessage("El 'servicio_id' debe ser un número entero positivo."),
+
+check('servicios.*.importe')
+    .not().isEmpty().withMessage("Cada servicio debe tener un importe obligatorio.")
+    .isFloat({ gt: 0 }).withMessage("El importe debe ser un número positivo."),
 
   validarCampos
 ];
 
 export const validarEditReserva = [
   check('fecha_reserva')
+  .optional()
     .notEmpty().withMessage('La fecha de reserva es obligatoria.')
     .isISO8601().withMessage('Debe tener un formato de fecha válido (YYYY-MM-DD).'),
 
   check('salon_id')
+  .optional()
     .notEmpty().withMessage('El ID del salón es obligatorio.')
     .isInt({ gt: 0 }).withMessage('El ID del salón debe ser un número entero positivo.'),
 
   check('usuario_id')
+  .optional()
     .notEmpty().withMessage('El ID del usuario es obligatorio.')
     .isInt({ gt: 0 }).withMessage('El ID del usuario debe ser un número entero positivo.'),
 
   check('turno_id')
+  .optional()
     .notEmpty().withMessage('El ID del turno es obligatorio.')
     .isInt({ gt: 0 }).withMessage('El ID del turno debe ser un número entero positivo.'),
 
@@ -59,6 +62,8 @@ export const validarEditReserva = [
     .isURL().withMessage('La foto del cumpleañero debe ser una URL válida.'),
 
   check('tematica')
+  .optional()
+  .optional()
     .notEmpty().withMessage('La temática es obligatoria.')
     .isLength({ max: 100 }).withMessage('La temática no puede exceder los 100 caracteres.'),
 
@@ -69,3 +74,4 @@ export const validarEditReserva = [
 
   validarCampos
 ];
+

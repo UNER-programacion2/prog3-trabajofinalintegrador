@@ -10,8 +10,15 @@ export default class ReservasController {
   // GET - OBTENER TODAS LAS RESERVAS
   getReservas = async (req, res) => {
     try {
-      const reservas = await this.ReservasServicios.getAllReservas();
+      const usuarioArray = req.user;
+      if (!usuarioArray || usuarioArray.length === 0) {
+            return res.status(401).json({ estado: false, mensaje: 'Usuario no autenticado.' });
+        }
+      const usuario = usuarioArray[0];
+
+      const reservas = await this.ReservasServicios.getAllReservas(usuario);
       res.json({ estado: true, datos: reservas });
+      
     } catch (error) {
       console.log('Error en GET /reservas', error);
       res.status(500).json({
@@ -62,19 +69,48 @@ export default class ReservasController {
 
   // POST - CREAR NUEVA RESERVA
   postReserva = async (req, res) => {
-  try {
+    try {
+    const usuarioArray = req.user;
+
+    if (!usuarioArray || usuarioArray === 0){
+      return res.status(401).json ({
+        estado: false,
+        mensaje: "Usuario no autenticado"})
+    }
+    
+    const usuarioAutenticado = usuarioArray[0];
+    const esAdmin = usuarioAutenticado.tipo_usuario === 1
+    
     const {
       fecha_reserva,
       salon_id,
-      usuario_id,
       turno_id,
       foto_cumpleaniero,
       tematica,
-      importe_total
+      importe_total,
+      servicios
     } = req.body;
+    
+    let id_usuario_final;
+    
+    
+    if (esAdmin) {
+       if (!req.body.usuario_id) {
+        return res.status(400).json({
+          estado: false,
+          mensaje: 'Faltan campos requeridos (el Admin debe proveer un usuario_id).'
+        });
+      }
+      id_usuario_final = req.body.usuario_id;
+    } else {
+      // Si es CLIENTE (o cualquier otro rol no-admin)
+      // IGNORAMOS el usuario_id del body (si es que vino).
+      // USAMOS el ID del token.
+      id_usuario_final = usuarioAutenticado.usuario_id;
+    }
 
     // Validar campos mínimos
-    if (!fecha_reserva || !salon_id || !usuario_id || !turno_id || !importe_total) {
+    if (!fecha_reserva || !salon_id || !turno_id || !importe_total) {
       return res.status(400).json({
         estado: false,
         mensaje: 'Faltan campos requeridos.'
@@ -84,19 +120,21 @@ export default class ReservasController {
     const reserva = {
       fecha_reserva,
       salon_id,
-      usuario_id,
+      usuario_id: id_usuario_final,
       turno_id,
       foto_cumpleaniero,
       tematica,
-      importe_total
+      importe_total,
+      servicios
     };
 
     // Intentar crear la reserva
     const nuevaReserva = await this.ReservasServicios.createReserva(reserva);
+    console.log(nuevaReserva)
 
     res.status(201).json({
       estado: true,
-      mensaje: `Reserva creada con ID ${nuevaReserva.insertId}`
+      mensaje: `Reserva creada con ID ${nuevaReserva[0].reserva_id}`,
     });
 
   } catch (error) {
