@@ -25,8 +25,6 @@ export default class reservasDb{
         
         try {
                 
-            
-            
             const sql = `INSERT INTO reservas (fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total)
             VALUES (?, ?, ?, ?, ? | null,?,?)`
 

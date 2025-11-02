@@ -29,13 +29,13 @@ app.use(morgan('combined'))
 app.use(morgan('combined', { stream: log }))
 
 
-app.use('/api/salones', salonesRouter);
-app.use('/api/usuarios', usuariosRouter);
-app.use('/api/servicios', serviciosRouter);
-app.use('/api/turnos', turnosRouter);
-app.use('/api/notificacion', emailRouter);
-app.use('/api/reservas_servicios', reservasServiciosR);
-app.use('/api/reservas',reservasRouter);
+app.use('/api/salones', passport.authenticate('jwt', { session: false }), salonesRouter);
+app.use('/api/usuarios', passport.authenticate('jwt', { session: false }), usuariosRouter);
+app.use('/api/servicios', passport.authenticate('jwt', { session: false }), serviciosRouter);
+app.use('/api/turnos', passport.authenticate('jwt', { session: false }), turnosRouter);
+app.use('/api/notificacion', passport.authenticate('jwt', { session: false }), emailRouter);
+app.use('/api/reservas_servicios', passport.authenticate('jwt', { session: false }),reservasServiciosR);
+app.use('/api/reservas', passport.authenticate('jwt', { session: false }),reservasRouter);
 app.use('/api/auth', authRouter);
 
 
