@@ -1,3 +1,4 @@
+
 export default function autorizarUsuarios(...perfilAutorizados) {
   return (req, res, next) => {
     const usuarioArray = req.user;

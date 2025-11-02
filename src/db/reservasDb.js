@@ -25,8 +25,6 @@ export default class reservasDb{
         
         try {
                 
-            
-            
             const sql = `INSERT INTO reservas (fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total)
             VALUES (?, ?, ?, ?, ?,?,?)`
 
@@ -49,7 +47,7 @@ export default class reservasDb{
     putReserva = async (reserva_id,{fecha_reserva, salon_id, usuario_id,turno_id,foto_cumpleaniero,tematica,importe_total }) =>{ 
         const sql = `
         UPDATE reservas
-        SET fecha_reserva = ?, salon_id = ?, usuario_id = ?, turno_id = ?, foto_cumplaniero = ?, tematica = ?, importe_total = ?
+        SET fecha_reserva = ?, salon_id = ?, usuario_id = ?, turno_id = ?, foto_cumpleaniero = ?, tematica = ?, importe_total = ?
         WHERE reserva_id = ? AND activo = 1
         `;
         
