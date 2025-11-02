@@ -15,5 +15,9 @@ export default class reservaServicioServicios{
     deleteReservaServicio = (reserva_servicio_id) => {
         return this.reservaServicio.deleteReservasServicios(reserva_servicio_id);
     }
+    //buscar
+    getServiciosDeReserva = async (reserva_id) => {
+        return await this.reservaServicio.getServiciosConDetalle(reserva_id);
+    };
 }
 

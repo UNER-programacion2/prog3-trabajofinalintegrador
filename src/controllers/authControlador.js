@@ -6,6 +6,8 @@ export default class LoginController {
   login = async (req, res, next) => {
     passport.authenticate('local', { session: false }, (err, usuario, info) => {
       if (err || !usuario) {
+
+        
         return res.status(400).json
         ({estado: false,
           mensaje:"Solicitud incorrecta."

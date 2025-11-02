@@ -12,18 +12,30 @@ export default class reservasServicios {
 
   // GET - obtener todas las reservas
   getAllReservas = async (usuario) => {
-    if (usuario.tipo_usuario < 3){
-      return this.reservas.getReservas();
-    }
-    else{
-      return this.reservas.getPropiasReservas(usuario.usuario_id)
-    }
-   
-  };
+    const reservasBase = 
+      usuario.tipo_usuario < 3 
+          ? await this.reservas.getReservas()
+          : await this.reservas.getPropiasReservas(usuario.usuario_id);
 
+    // agregamos los servicios
+    const reservasConServicios = await Promise.all(
+      reservasBase.map(async (reserva) => {
+        const servicios = await this.reservaServicioServicios.getServiciosDeReserva(reserva.reserva_id);
+        return { ...reserva, servicios };
+      })
+    );
+    return reservasConServicios;
+  };
+  
   // GET BY ID - obtener una reserva por su id
   getReservaConId = async (reserva_id) => {
-    return await this.reservas.getReservaConId(reserva_id);
+     const reservaBase = await this.reservas.getReservaConId(reserva_id);
+    if (!reservaBase || reservaBase.length === 0) return null;
+
+    const reserva = reservaBase[0];
+    const servicios = await this.reservaServicioServicios.getServiciosDeReserva(reserva_id);
+
+    return { ...reserva, servicios };
   };
 
 
