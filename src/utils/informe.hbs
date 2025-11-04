@@ -18,12 +18,6 @@
             padding-bottom: 10px;
         }
 
-        .fecha {
-            text-align: right;
-            font-size: 10px;
-            color: #555;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -31,7 +25,7 @@
         }
 
         th {
-            background-color: #6729b9ff;
+            background-color: rgb(9, 11, 15); /* Estilo del primer archivo */
             color: #fff;
             padding: 8px;
             text-align: left;
@@ -40,10 +34,11 @@
         td {
             border-bottom: 1px solid #ccc;
             padding: 8px;
+            text-align: center; /* Estilo del primer archivo */
         }
 
         tr:nth-child(even) {
-            background-color: #f8f8f8;
+            background-color: #f8f8f8; /* Estilo del primer archivo */
         }
 
         .footer {
@@ -51,11 +46,6 @@
             font-size: 10px;
             margin-top: 40px;
             color: #777;
-        }
-
-        .logo {
-            width: 80px;
-            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -65,17 +55,27 @@
     <table>
         <thead>
             <tr>
-                <th>Fecha Reserva</th>
+                {{! Columnas del segundo archivo }}
+                <th>ID</th>
                 <th>Salón</th>
-                <th>Turno</th>
+                <th>Fecha</th>
+                <th>Hora Inicio</th>
+                <th>Hora Fin</th>
+                <th>Usuario</th>
+                <th>Importe Total</th>
             </tr>
         </thead>
         <tbody>
             {{#each reservas}}
             <tr>
+                {{! Datos del segundo archivo }}
+                <td>{{this.reserva_id}}</td>
+                <td>{{this.nombre_salon}}</td>
                 <td>{{this.fecha_reserva}}</td>
-                <td>{{this.titulo}}</td>
-                <td>{{this.orden}}</td>
+                <td>{{this.hora_desde}}</td>
+                <td>{{this.hora_hasta}}</td>
+                <td>{{this.usuario}}</td>
+                <td>{{this.importe_total}}</td>
             </tr>
             {{/each}}
         </tbody>

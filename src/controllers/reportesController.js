@@ -1,12 +1,22 @@
+import ReservasServicios from "../servicios/reservas.js"
 import puppeteer from "puppeteer";
 import { Parser } from "json2csv";
+import { fileURLToPath } from "url";
+import Handlebars from "handlebars";
 import fs from "fs";
-import ReservasServicios from "../servicios/reservas.js"
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const templatePath = path.join(__dirname, "../utils/informe.hbs");
+const templateString = fs.readFileSync(templatePath, "utf-8");
 
 export default class ReportesController {
   
   constructor() {
     this.ReservasServicios = new ReservasServicios();
+    this.template = Handlebars.compile(templateString);
   }
 
   // GET /api/reportes/reservas?formato=pdf|csv
@@ -16,13 +26,14 @@ export default class ReportesController {
       
         const { formato } = req.query;
         const usuarioArray = req.user;
+
         if (!usuarioArray || usuarioArray.length === 0) {
             return res.status(401).json({ estado: false, mensaje: 'Usuario no autenticado.' });
           }
       
           const usuario = usuarioArray[0];
 
-      // 🔹 Ejemplo: obtener datos desde tu capa de servicio o BD
+      //obtener datos
       const reservas = await this.ReservasServicios.getAllReservas(usuario); 
 
       if (!reservas || reservas.length === 0)
@@ -44,51 +55,18 @@ export default class ReportesController {
 
   // generar PDF con Puppeteer
   generarPDF = async (reservas, res) => {
-    const html = `
-      <html>
-        <head>
-          <style>
-            body { font-family: Arial, sans-serif; padding: 20px; }
-            h1 { text-align: center; color: #444; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-            th { background-color: #f5f5f5; }
-          </style>
-        </head>
-        <body>
-          <h1>Reporte de Reservas</h1>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Salón</th>
-                <th>Fecha</th>
-                <th>Hora Inicio</th>
-                <th>Hora Fin</th>
-                <th>Usuario</th>
-                <th>Importe Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${reservas
-                .map(
-                  (r) => `
-                <tr>
-                   <td>${r.reserva_id}</td>
-                    <td>${r.nombre_salon || "Sin dato"}</td>
-                    <td>${r.fecha_reserva}</td>
-                    <td>${r.hora_desde}</td>
-                    <td>${r.hora_hasta}</td>
-                    <td>${r.usuario || "Anónimo"}</td>
-                    <td>$${Number(r.importe_total || 0).toFixed(2)}</td>
-                </tr>`
-                )
-                .join("")}
-            </tbody>
-          </table>
-        </body>
-      </html>
-    `;
+
+    const reservasaParaTemplate = reservas.map(r => ({
+      reserva_id: r.reserva_id,
+      nombre_salon: r.nombre_salon,
+      fecha_reserva: new Date(r.fecha_reserva).toLocaleDateString('es-AR'),
+      hora_desde: r.hora_desde,
+      hora_hasta: r.hora_hasta,
+      usuario: r.usuario,
+      importe_total: `${Number(r.importe_total || 0).toFixed(2)}`,
+
+    }))
+    const html = this.template ({reservas: reservasaParaTemplate});
 
     const browser = await puppeteer.launch({headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
@@ -126,5 +104,3 @@ export default class ReportesController {
   };
 }
 
-
-// <td>$${r.importe_total?.toFixed(2) || "0.00"}</td>
