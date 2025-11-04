@@ -43,7 +43,7 @@ app.use('/api/reservas', passport.authenticate('jwt', { session: false }),reserv
 app.use('/api/auth', authRouter);
 app.use('/api/registro', registroClienteRouter);
 
-// pdf csvg
+// pdf csv
 app.use('/api/reportes', passport.authenticate('jwt', { session: false }), reporterRouter);
 
 // documentación Swagger
