@@ -19,7 +19,13 @@ export default class UsuariosController {
 
   getAllUsuarios = async (req, res) => {
     try {
-      const usuarios = await this.UsuariosServicios.getAllUsuarios(); 
+      const usuarioArray = req.user;
+      if (!usuarioArray || usuarioArray.length === 0) {
+            return res.status(401).json({ estado: false, mensaje: 'Usuario no autenticado.' });
+        }
+      const usuario = usuarioArray[0];
+
+      const usuarios = await this.UsuariosServicios.getAllUsuarios(usuario); 
       res.status(200).json(usuarios);
 
     } catch (error) {

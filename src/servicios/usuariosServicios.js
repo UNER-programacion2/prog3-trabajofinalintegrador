@@ -10,8 +10,8 @@ export default class UsuariosServicios {
     
   };
 
-  getAllUsuarios = async () => {
-    const usuarioReq = req.user.tipo_usuario;
+  getAllUsuarios = async (usuario) => {
+    const usuarioReq = usuario.tipo_usuario;
 
     // if (usuarioReq === 2){
     //   await this.UsuariosDb.getAllClientes()
@@ -20,11 +20,11 @@ export default class UsuariosServicios {
     //   await this.UsuariosDb.getAllUsuarios()
     // }
 
-    const usuario = usuarioReq < 2
+    const usuarioR = usuarioReq < 2
           ? await this.UsuariosDb.getAllUsuarios()
           : await this.UsuariosDb.getAllClientes()
   
-    return usuario;
+    return usuarioR;
   };
   
   getUsuarioConId = async (id) => {
