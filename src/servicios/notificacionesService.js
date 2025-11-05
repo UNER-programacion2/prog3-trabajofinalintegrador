@@ -1,51 +1,59 @@
 import nodemailer from "nodemailer";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import handlebars from "handlebars";
+import { fileURLToPath } from "url";
+import { readFile } from "fs/promises";
+import path from "path";
 
 export default class NotificacionesService {
-    enviarCorreo = async (datosCorreo) => {
-        const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
+  enviarCorreo = async (datosCorreo) => {
+    try {
+      const reserva = datosCorreo[0][0];
+      const admins = datosCorreo[1];
 
-        const plantillaPath = path.join(process.cwd(), 'src/utils/plantilla.hbs');
+      if (!reserva || !admins || admins.length === 0) {
+        console.log("⚠️ No hay datos válidos para enviar el correo.");
+        return;
+      }
+
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
+      const plantillaPath = path.join(__dirname, "../utils/plantilla.hbs");
+
+      const contenidoPlantilla = await readFile(plantillaPath, "utf-8");
+      const template = handlebars.compile(contenidoPlantilla);
+
+     
+      const html = template({
+        fecha: reserva.fecha,
+        salon: reserva.salon,
+        turno: reserva.turno,
+      });
+
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.USER,
+          pass: process.env.PASS,
+        },
+      });
+
+      const destinatarios = admins.map((a) => a.correoAdmin).join(", ");
+
+      const opciones = {
+        from: process.env.USER,
+        to: destinatarios,
+        subject: "Nueva Reserva Registrada 🎉",
+        html: html,
+      };
 
 
-        const plantilla = fs.readFileSync(plantillaPath, "utf-8");
-        const template = handlebars.compile(plantilla);
+      const info = await transporter.sendMail(opciones);
+      console.log(`✅ Correo enviado correctamente a: ${destinatarios}`);
+      console.log(`📬 ID del mensaje: ${info.messageId}`);
 
-        const datos = {
-            fecha: datosCorreo[0][0].fecha,
-            salon: datosCorreo[0][0].salon,
-            turno: datosCorreo[0][0].turno,
-        };
-
-        const correoHtml = template(datos);
-
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: process.env.USER,
-                pass: process.env.PASS,
-            },
-        });
-
-        const correosAdmin = datosCorreo[1].map((a) => a.correoAdmin);
-        const destinatarios = correosAdmin.join(", ");
-
-        const mailOptions = {
-            from: process.env.CORREO,
-            to: destinatarios,
-            subject: "Nueva Reserva Registrada",
-            html: correoHtml,
-        };
-
-        try {
-            await transporter.sendMail(mailOptions);
-            console.log("✅ Correo enviado correctamente a:", destinatarios);
-        } catch (error) {
-            console.error("❌ Error enviando el correo:", error);
-        }
-    };
+    } catch (error) {
+      console.error("❌ Error enviando notificación por correo:", error);
+    }
+  };
 }
+
