@@ -31,7 +31,6 @@ reservasRouter.route('/:reserva_id')
         controller.putReserva) 
 // DELETE eliminar reserva              
     .delete(
-        //passport.authenticate('jwt', { session: false }),
         autorizarUsuarios(1),
         controller.deleteReserva); 
 
