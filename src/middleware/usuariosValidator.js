@@ -11,9 +11,10 @@ export const validarCreateUsuario = [
         .not().isEmpty().withMessage("El apellido es obligatorio.")
         .isString().withMessage("Debe ser una cadena de texto."),
     
-    check('nombre_usuario') 
-        .not().isEmpty().withMessage("El nombre_usuario es obligatorio.")
-        .isString().withMessage("Debe ser una cadena de texto."),
+    check('nombre_usuario')
+        .isEmail().withMessage('El nombre de usuario tiene que ser un correo')
+        .trim()
+        .not().isEmpty().withMessage('El email es obligatorio'),
 
     check('contrasenia')
         .not().isEmpty().withMessage("La contraseña es obligatoria.")
@@ -42,10 +43,10 @@ export const validarEditUsuario = [
         .not().isEmpty().withMessage("El apellido no puede estar vacío.")
         .isString().withMessage("Debe ser una cadena de texto."),
     
-    check('nombre_usuario') 
-        .optional()
-        .not().isEmpty().withMessage("El nombre_usuario no puede estar vacío.")
-        .isString().withMessage("Debe ser una cadena de texto."),
+    check('nombre_usuario')
+        .isEmail().withMessage('El nombre de usuario tiene que ser un correo')
+        .trim()
+        .not().isEmpty().withMessage('El email es obligatorio'),
 
     check('contrasenia')
         .optional()

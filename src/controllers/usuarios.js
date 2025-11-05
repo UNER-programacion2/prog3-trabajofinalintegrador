@@ -1,5 +1,3 @@
-
-import { usuariosRouter } from "../routes/usuariosR.js";
 import UsuariosServicios from "../servicios/usuariosServicios.js";
 
 export default class UsuariosController {

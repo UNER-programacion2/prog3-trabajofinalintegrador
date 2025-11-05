@@ -37,4 +37,106 @@ serviciosRouter.route('/:servicio_id')
         validarId('servicio_id'),
         controller.deleteServicio);
 
+
+/**
+ * @swagger
+ * tags:
+ *   name: Servicios
+ *   description: Endpoints para los servicios adicionales
+ */
+
+/**
+ * @swagger
+ * /servicios:
+ *   get:
+ *     summary: Listar todos los servicios disponibles
+ *     tags: [Servicios]
+ *     responses:
+ *       200:
+ *         description: Lista de servicios
+ *
+ *   post:
+ *     summary: Crear un nuevo servicio
+ *     tags: [Servicios]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *               precio:
+ *                 type: number
+ *     responses:
+ *       201:
+ *         description: Servicio creado
+ *
+ * /servicios/{servicio_id}:
+ *   get:
+ *     summary: Obtener un servicio por su ID
+ *     tags: [Servicios]
+ *     parameters:
+ *       - name: servicio_id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Servicio encontrado
+ *       404:
+ *         description: Servicio no encontrado
+ *
+ *   put:
+ *     summary: Actualizar un servicio existente
+ *     tags: [Servicios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: servicio_id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *               precio:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Servicio actualizado
+ *       400:
+ *         description: Datos inválidos
+ *       404:
+ *         description: Servicio no encontrado
+ *
+ *   delete:
+ *     summary: Eliminar un servicio
+ *     tags: [Servicios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: servicio_id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Servicio eliminado (desactivado)
+ *       404:
+ *         description: Servicio no encontrado
+ */
+
 export { serviciosRouter };

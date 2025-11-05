@@ -41,7 +41,7 @@ export default class turnosDb{
         const valores = Object.values(datos);
         const setValores = campos.map(campos => `${campos} = ?`).join(', ');
 
-        const sql = `UPDATE turnos SET ${setValores} WHERE salon_id = ? `;
+        const sql = `UPDATE turnos SET ${setValores} WHERE turno_id = ? `;
         const [results] = await conexion.execute(sql,[...valores,turno_id]);
 
         if (results.affectedRows === 0){ 
