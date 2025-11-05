@@ -29,7 +29,7 @@ usuariosRouter.route('/:usuario_id')
 
     // PUT actualizar usuario    
     .put( 
-       // autorizarUsuarios(1),
+        autorizarUsuarios(1),
         validarId('usuario_id'),
         validarEditUsuario,
         controller.putUsuario)
