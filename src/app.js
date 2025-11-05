@@ -13,6 +13,7 @@ import {authRouter } from './routes/authR.js';
 import {estrategia, validacion} from './config/passport.js';
 import { swaggerDocs  } from './config/swagger.js';
 import {reporterRouter} from './routes/reportes.js';
+import {estadisticasRouter} from './routes/estadisticasR.js'
 
 import{ registroClienteRouter } from './routes/registroR.js'
 
@@ -40,6 +41,7 @@ app.use('/api/turnos', passport.authenticate('jwt', { session: false }), turnosR
 app.use('/api/notificacion', passport.authenticate('jwt', { session: false }), emailRouter);
 app.use('/api/reservas_servicios', passport.authenticate('jwt', { session: false }),reservasServiciosR);
 app.use('/api/reservas', passport.authenticate('jwt', { session: false }),reservasRouter);
+app.use('/api/ingresos-mes', passport.authenticate('jwt', { session: false }) , estadisticasRouter)
 app.use('/api/auth', authRouter);
 app.use('/api/registro', registroClienteRouter);
 
