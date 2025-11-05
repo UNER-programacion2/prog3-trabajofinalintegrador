@@ -10,12 +10,17 @@ estadisticasRouter.get('/',
     autorizarUsuarios(1), 
     controller.getReporteIngresos
 );
-
 /**
  * @swagger
- * /:
+ * tags:
+ *   - name: Estadisticas
+ *     description: Endpoint Obtiene el reporte de ingresos de los últimos 30 días.
+ */
+/**
+ * @swagger
+ * /ingresos-mes:
  *   get:
- *     summary: Obtiene el reporte de ingresos de los últimos 30 días.
+ *     summary: Obtener el reporte de ingresos de los últimos 30 días.
  *     tags:
  *       - Estadisticas
  *     security:
