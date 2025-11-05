@@ -13,9 +13,9 @@ export const validarCreateServicio = [
     .not().isEmpty().withMessage("El importe es obligatorio.")
     .isFloat({ gt: 0 }).withMessage("El importe debe ser un número positivo."),
 
-  check('activo')
-    .optional()
-    .isBoolean().withMessage("El campo 'activo' debe ser verdadero o falso (true/false, 1/0)."),
+  // check('activo')
+  //   .optional()
+  //   .isBoolean().withMessage("El campo 'activo' debe ser verdadero o falso (true/false, 1/0)."),
 
   validarCampos
 ];
@@ -34,9 +34,9 @@ export const validarEditServicio = [
     .optional({ checkFalsy: true })
     .isFloat({ gt: 0 }).withMessage("El importe debe ser un número positivo."),
 
-  check('activo')
-    .optional()
-    .isBoolean().withMessage("El campo 'activo' debe ser verdadero o falso (true/false, 1/0)."),
+  // check('activo')
+  //   .optional()
+  //   .isBoolean().withMessage("El campo 'activo' debe ser verdadero o falso (true/false, 1/0)."),
 
   validarCampos
 ];
