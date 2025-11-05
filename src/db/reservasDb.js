@@ -77,4 +77,16 @@ export default class reservasDb{
         const [result] = await conexion.execute(sql, [reserva_id]);
         return result;
     }
+
+    // NOTIFCACIONES STORE PROCEDURE
+
+    datosParaNotificacion = async (reserva_id) => {
+    const sql = `CALL obtenerDatosNotificacion(?)`;
+    const [reserva] = await conexion.execute(sql, [reserva_id]);
+    if (!reserva || reserva.length === 0) {
+        return null;
+    }
+    return reserva;
+};
+
 }
