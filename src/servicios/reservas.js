@@ -1,13 +1,14 @@
 import reservasDb from "../db/reservasDb.js";
 import { validarFKsReserva } from "./validacionesFk.js";
 import reservaServicioServicios from "./reservaServiciosService.js";
-
+import NotificacionesService from "./notificacionesService.js";
 
 
 export default class reservasServicios {
   constructor() {
     this.reservas = new reservasDb();
     this.reservaServicioServicios = new reservaServicioServicios();
+    this.notificacionesService = new NotificacionesService();
   }
 
   // GET - obtener todas las reservas
@@ -73,9 +74,23 @@ export default class reservasServicios {
     
     await this.reservaServicioServicios.addServicioReserva(result.insertId, servicios);
     //return { ok: true, reserva_id: result.reserva_id };
+
+    // Buscar datos para la notificación y enviar correo
+    try {
+      const datosParaNotificacion = await this.reservas.datosParaNotificacion(result.insertId);
+
+      if (datosParaNotificacion && datosParaNotificacion.length > 0) {
+        await this.notificacionesService.enviarCorreo(datosParaNotificacion);
+      } else {
+        console.log("⚠️ No se encontraron datos para la notificación.");
+      }
+
+    } catch (error) {
+      console.error("❌ Error enviando notificación por correo:", error);
+    }
     return this.reservas.getReservaConId(result.insertId);
 
-};
+  };
 
   // PUT - editar reserva existente
   editReserva = async (reserva_id, data) => {
@@ -87,4 +102,5 @@ export default class reservasServicios {
   deleteReserva = async (reserva_id) => {
     return await this.reservas.deleteReserva(reserva_id);
   };
+
 }

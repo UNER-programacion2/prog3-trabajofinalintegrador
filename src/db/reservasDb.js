@@ -4,7 +4,7 @@ export default class reservasDb{
 
     
     getPropiasReservas = async(usuario_id) => {
-        const sql = 'SELECT * FROM reservas WHERE activo = 1 AND usuario_id = ?';
+        const sql = "SELECT r.reserva_id, r.fecha_reserva, r.salon_id, s.titulo AS nombre_salon, r.usuario_id, CONCAT(u.nombre, ' ', u.apellido) AS usuario, t.hora_desde, t.hora_hasta, r.tematica, r.importe_total FROM reservas AS r JOIN salones AS s ON r.salon_id = s.salon_id JOIN usuarios AS u ON r.usuario_id = u.usuario_id JOIN turnos as t ON r.turno_id = t.turno_id FROM reservas WHERE r.activo = 1 AND r.usuario_id = ?";
         const [reservas] = await conexion.execute(sql, [usuario_id]);
         return reservas;
     }
@@ -77,4 +77,16 @@ export default class reservasDb{
         const [result] = await conexion.execute(sql, [reserva_id]);
         return result;
     }
+
+    // NOTIFCACIONES STORE PROCEDURE
+
+    datosParaNotificacion = async (reserva_id) => {
+    const sql = `CALL obtenerDatosNotificacion(?)`;
+    const [reserva] = await conexion.execute(sql, [reserva_id]);
+    if (!reserva || reserva.length === 0) {
+        return null;
+    }
+    return reserva;
+};
+
 }
