@@ -6,9 +6,10 @@ export default class reservaServicioServicios{
         this.reservaServicio = new reservasServiciosDb();
     }
 
+
     // agrear
     addServicioReserva = async (reserva_id, servicios) => {
-        return await this.reservaServicio.postReservasServicios(reserva_id, servicios);
+        return await this.reservaServicio.insertServiciosReserva(reserva_id, servicios);
     }
     
     //eliminar

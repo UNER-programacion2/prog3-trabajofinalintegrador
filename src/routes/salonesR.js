@@ -13,8 +13,6 @@ const authJwt = passport.authenticate('jwt', { session: false });
 
 salonesRouter.get('/',
     cacheMinutes,
-    authJwt,
-    autorizarUsuarios(1,2,3),
     controller.getSalones);
 
 

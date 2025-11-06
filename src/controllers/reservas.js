@@ -87,7 +87,6 @@ export default class ReservasController {
       turno_id,
       foto_cumpleaniero,
       tematica,
-      importe_total,
       servicios
     } = req.body;
     
@@ -110,7 +109,7 @@ export default class ReservasController {
     }
 
     // Validar campos mínimos
-    if (!fecha_reserva || !salon_id || !turno_id || !importe_total) {
+    if (!fecha_reserva || !salon_id || !turno_id) {
       return res.status(400).json({
         estado: false,
         mensaje: 'Faltan campos requeridos.'
@@ -124,7 +123,6 @@ export default class ReservasController {
       turno_id,
       foto_cumpleaniero,
       tematica,
-      importe_total,
       servicios
     };
 

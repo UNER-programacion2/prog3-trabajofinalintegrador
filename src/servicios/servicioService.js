@@ -15,6 +15,10 @@ export default class serviciosServicios {
         return this.servicios.getServicioConId(servicio_id);
     }
 
+    getServicioConIds = (ids) =>{
+        return this.servicios.getServiciosByIds(ids);
+    }
+
     createServicio = (data) => {
         return this.servicios.addServicio(data);
     }

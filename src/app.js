@@ -37,7 +37,7 @@ app.use(morgan('combined'))
 app.use(morgan('combined', { stream: log }))
 
 
-app.use('/api/salones', passport.authenticate('jwt', { session: false }), salonesRouter);
+app.use('/api/salones', salonesRouter);
 app.use('/api/usuarios', usuariosRouter);
 // estadisticas 
 app.use('/api/estadisticas', estadisticasRoutes);

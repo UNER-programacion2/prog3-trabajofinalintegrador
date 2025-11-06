@@ -15,7 +15,7 @@ export default class salonesDb{
         if (salon.length === 0){
             return null
         }
-        return salon;
+        return salon[0];
     }
 
     createSalon = async ({titulo, direccion, capacidad, importe})=>{ 

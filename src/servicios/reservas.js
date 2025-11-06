@@ -2,13 +2,17 @@ import reservasDb from "../db/reservasDb.js";
 import { validarFKsReserva } from "./validacionesFk.js";
 import reservaServicioServicios from "./reservaServiciosService.js";
 import NotificacionesService from "./notificacionesService.js";
-
+import { conexion } from "../db/conexion.js";
+import salonesServicios from "./salonesServicios.js";
+import serviciosServicios from "./servicioService.js";
 
 export default class reservasServicios {
   constructor() {
     this.reservas = new reservasDb();
     this.reservaServicioServicios = new reservaServicioServicios();
     this.notificacionesService = new NotificacionesService();
+    this.salones = new salonesServicios();
+    this.servicios = new serviciosServicios();
   }
 
   // GET - obtener todas las reservas
@@ -40,57 +44,105 @@ export default class reservasServicios {
   };
 
 
-  // POST - crear nueva reserva 
   createReserva = async (reserva) => {
-    await validarFKsReserva(reserva);
-  
-  const {
-          fecha_reserva,
-          salon_id,
-          usuario_id,
-          turno_id,
-          foto_cumpleaniero, 
-          tematica,
-          importe_salon,
-          importe_total,
-          servicios } = reserva;
+  await validarFKsReserva(reserva);
 
-      const nuevaReserva = {
-          fecha_reserva,
-          salon_id,
-          usuario_id,
-          turno_id,
-          foto_cumpleaniero, 
-          tematica,
-          importe_salon,
-          importe_total
-        }    
+  // ✅ Obtener conexión del pool
+  const conn = await conexion.getConnection();
+  await conn.beginTransaction();
 
-    const result = await this.reservas.postReserva(nuevaReserva);
+  try {
+    const {
+      fecha_reserva,
+      salon_id,
+      usuario_id,
+      turno_id,
+      foto_cumpleaniero = null,
+      tematica = null,
+      servicios = []
+    } = reserva;
 
-    if (!result){
-      return null
-    }
-    
-    await this.reservaServicioServicios.addServicioReserva(result.insertId, servicios);
-    //return { ok: true, reserva_id: result.reserva_id };
+    const salon = await this.salones.getSalonConId(salon_id);
+if (!salon) throw new Error("El salón especificado no existe.");
 
-    // Buscar datos para la notificación y enviar correo
-    try {
-      const datosParaNotificacion = await this.reservas.datosParaNotificacion(result.insertId);
+// convierte a número (si el campo en DB se llama precio, usa salon.precio)
+const importe_salon = Number(salon.importe ?? salon.precio ?? 0);
 
-      if (datosParaNotificacion && datosParaNotificacion.length > 0) {
-        await this.notificacionesService.enviarCorreo(datosParaNotificacion);
-      } else {
-        console.log("⚠️ No se encontraron datos para la notificación.");
-      }
+// obtiene los servicios con importe
+const serviciosData = servicios.length
+  ? await this.servicios.getServicioConIds(servicios)
+  : [];
 
-    } catch (error) {
-      console.error("❌ Error enviando notificación por correo:", error);
-    }
-    return this.reservas.getReservaConId(result.insertId);
+const totalServicios = serviciosData.reduce((acc, s) => acc + Number(s.importe), 0);
 
-  };
+// suma total
+const importe_total = importe_salon + totalServicios;
+
+// ⚠️ Log para verificar que todo sea número
+console.log(">>> importe_salon:", importe_salon);
+console.log(">>> totalServicios:", totalServicios);
+console.log(">>> importe_total:", importe_total);
+
+
+
+    // 1️⃣ Obtener precios
+    // const salon = await this.salones.getSalonConId(salon_id);
+    // if (!salon) throw new Error("El salón especificado no existe.");
+
+    // const serviciosData = servicios.length
+    //   ? await this.servicios.getServicioConIds(servicios)
+    //   : [];
+
+    // const importe_salon = salon.importe;
+    // const totalServicios = serviciosData.reduce((acc, s) => acc + s.importe, 0);
+    // const importe_total = importe_salon + totalServicios;
+
+    // 2️⃣ Crear reserva
+    console.log("Insertando reserva con datos:", {
+      fecha_reserva,
+      salon_id,
+      usuario_id,
+      turno_id,
+      foto_cumpleaniero,
+      tematica,
+      importe_salon,
+      importe_total,
+    });
+
+    const result = await this.reservas.postReserva({
+      fecha_reserva,
+      salon_id,
+      usuario_id,
+      turno_id,
+      foto_cumpleaniero,
+      tematica,
+      importe_salon,
+      importe_total,
+    });
+
+    const reservaId = result.insertId;
+
+    // 3️⃣ Insertar servicios asociados
+    await this.reservaServicioServicios.addServicioReserva(reservaId, serviciosData);
+
+    await conn.commit();
+
+    // 4️⃣ Notificar
+    // const datosParaNotificacion = await this.reservas.datosParaNotificacion(reservaId);
+    // if (datosParaNotificacion?.length) {
+    //   await this.notificacionesService.enviarCorreo(datosParaNotificacion);
+    // }
+
+    return this.reservas.getReservaConId(reservaId);
+
+  } catch (error) {
+    await conn.rollback();
+    console.error("❌ Error en createReserva:", error);
+    throw error;
+  } finally {
+    conn.release(); // ✅ ahora funciona porque conn viene del pool
+  }
+};
 
   // PUT - editar reserva existente
   editReserva = async (reserva_id, data) => {
