@@ -37,10 +37,8 @@ export default class UsuariosController {
   // GET /usuarios/:usuario_id
   getUsuarioConId = async (req, res) => {
     try {
-      const usuario_id = parseInt(req.params.usuario_id);
-      if (isNaN(usuario_id))
-        return res.status(400).json({ ok: false, mensaje: "ID inválido." });
-
+      const usuario_id = req.params.usuario_id;
+   
       const usuario = await this.UsuariosServicios.getUsuarioConId(usuario_id);
       if (usuario.length === 0)
         return res.status(404).json({ ok: false, mensaje: "Usuario no encontrado." });

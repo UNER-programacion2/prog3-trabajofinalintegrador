@@ -3,7 +3,7 @@ import express from 'express';
 import ReservasController from '../controllers/reservas.js';
 import { validarCreateReserva, validarEditReserva } from '../middleware/validators/reservasValidator.js';
 import autorizarUsuarios from '../middleware/auth/autorizarUsuarios.js';
-
+import { validarId } from '../middleware/validators/validacionId.js'
 const reservasRouter = express.Router();
 const controller = new ReservasController();
 
@@ -22,15 +22,17 @@ reservasRouter.post('/',
 reservasRouter.route('/:reserva_id')
 // GET reserva por ID
     .get(
+        validarId('reserva_id'),
         autorizarUsuarios(1),
-        validarEditReserva,
         controller.getReservaConId) 
 // PUT actualizar reserva          
     .put( 
+        validarId('reserva_id'),
         autorizarUsuarios(1),
         controller.putReserva) 
 // DELETE eliminar reserva              
     .delete(
+        validarId('reserva_id'),
         autorizarUsuarios(1),
         controller.deleteReserva); 
 

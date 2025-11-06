@@ -25,9 +25,6 @@ export default class turnosController{
     try {
       const turno_id = req.params.turno_id;
 
-      if (isNaN(turno_id))
-        return res.status(400).json({ ok: false, mensaje: "ID inválido." });
-
       const turno = await this.turnosServicios.getTurnoConId(turno_id);
 
       if (turno.length === 0)

@@ -31,15 +31,7 @@ export default class ReservasController {
   // GET BY ID - OBTENER UNA RESERVA POR ID
   getReservaConId = async (req, res) => {
     try {
-      const reserva_id = parseInt(req.params.reserva_id);
-
-      // Validar ID
-      if (isNaN(reserva_id)) {
-        return res.status(400).json({
-          ok: false,
-          mensaje: "ID de reserva inválido."
-        });
-      }
+      const reserva_id = req.params.reserva_id;
 
       // Obtener reserva
       const reserva = await this.ReservasServicios.getReservaConId(reserva_id);
