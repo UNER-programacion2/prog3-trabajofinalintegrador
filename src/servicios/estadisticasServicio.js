@@ -11,6 +11,6 @@ export default class EstadisticasServicio {
     }
   
     getIngresos = async() => {
-        return await this.db.getIngresosUltimoMes()
+        return await this.estadisticas.getIngresosUltimoMes()
     }
 }

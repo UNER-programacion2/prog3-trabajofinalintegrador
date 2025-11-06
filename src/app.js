@@ -2,22 +2,24 @@ import express from 'express';
 import morgan from 'morgan';
 import passport from 'passport';
 import fs from 'fs';
+// user/auth
 import { usuariosRouter } from './routes/usuariosR.js';
+import {authRouter } from './routes/auth/authR.js';
+import{ registroClienteRouter } from './routes/auth/registroR.js' 
+
+//funcionalidades
+import {emailRouter} from  './routes/emailR.js'; //esto no se si va
+import {reporterRouter} from './routes/reportes.js';
+import {estadisticasRouter} from './routes/estadisticasR.js' 
+
 import { salonesRouter } from './routes/salonesR.js';
 import {serviciosRouter} from './routes/serviciosR.js';
 import {turnosRouter} from './routes/turnosR.js';
-import {emailRouter} from  './routes/emailR.js';
 import {reservasServiciosR} from './routes/reservasServiciosR.js';
 import { reservasRouter } from './routes/reservasR.js';
-import {authRouter } from './routes/authR.js';
 import {estrategia, validacion} from './config/passport.js';
 import { swaggerDocs  } from './config/swagger.js';
-import {reporterRouter} from './routes/reportes.js';
-import estadisticasRoutes from './routes/estadisticasRoutes.js';
 
-import {estadisticasRouter} from './routes/estadisticasR.js' //g
-
-import{ registroClienteRouter } from './routes/registroR.js' //v
 
 const app = express();
 
@@ -39,18 +41,19 @@ app.use(morgan('combined', { stream: log }))
 
 app.use('/api/salones', passport.authenticate('jwt', { session: false }), salonesRouter);
 app.use('/api/usuarios', usuariosRouter);
-// estadisticas 
-app.use('/api/estadisticas', estadisticasRoutes);
+
+// estadisticas
+app.use('/api/estadisticas', passport.authenticate('jwt', { session: false }) , estadisticasRouter)
+
 app.use('/api/servicios', passport.authenticate('jwt', { session: false }), serviciosRouter);
 app.use('/api/turnos', passport.authenticate('jwt', { session: false }), turnosRouter);
 app.use('/api/notificacion', passport.authenticate('jwt', { session: false }), emailRouter);
 app.use('/api/reservas_servicios', passport.authenticate('jwt', { session: false }),reservasServiciosR);
 app.use('/api/reservas', passport.authenticate('jwt', { session: false }),reservasRouter);
-app.use('/api/ingresos-mes', passport.authenticate('jwt', { session: false }) , estadisticasRouter)
 app.use('/api/auth', authRouter);
 app.use('/api/registro', registroClienteRouter);
 
-// pdf csv
+// pdf - csv
 app.use('/api/reportes', passport.authenticate('jwt', { session: false }), reporterRouter);
 
 // documentación Swagger
