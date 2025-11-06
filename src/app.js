@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import passport from 'passport';
 import fs from 'fs';
+import cors from 'cors';
 // user/auth
 import { usuariosRouter } from './routes/usuariosR.js';
 import {authRouter } from './routes/auth/authR.js';
@@ -21,10 +22,11 @@ import {estrategia, validacion} from './config/passport.js';
 import { swaggerDocs  } from './config/swagger.js';
 
 
+
 const app = express();
 
-
 // Middlewares globales
+app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));  
 
@@ -57,6 +59,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/registro', registroClienteRouter);
 
 // pdf - csv
+//http://localhost:3000/api/reportes/?formato=pdf
 app.use('/api/reportes', passport.authenticate('jwt', { session: false }), reporterRouter);
 
 // documentación Swagger
