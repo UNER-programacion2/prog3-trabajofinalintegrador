@@ -18,16 +18,29 @@ export default class reservasServiciosDb {
   
 
   // Insertar servicios asociados a una reserva
-  insertServiciosReserva = async (conn, reserva_id, servicios) => {
-    if (!servicios || servicios.length === 0) return;
+  postReservasServicios = async (reserva_id, servicios) => {
+  const conn = await conexion.getConnection ? await conexion.getConnection() : conexion;
 
-    const values = servicios.map((s) => [reserva_id, s.servicio_id, s.importe]);
-    const sql = `
-      INSERT INTO reservas_servicios (reserva_id, servicio_id, importe)
-      VALUES ?
-    `;
-    await conn.query(sql, [values]);
-  };
+  try {
+    await conn.beginTransaction();
+
+    for (const servicio of servicios) {
+      const sql = "INSERT INTO reservas_servicios (reserva_id, servicio_id, importe) VALUES (?, ?, ?)";
+      await conn.execute(sql, [reserva_id, servicio.servicio_id, servicio.importe]);
+    }
+
+    await conn.commit();
+    return true;
+
+  } catch (error) {
+    if (conn.rollback) await conn.rollback();
+    console.log(`❌ Error en postReservasServicios: ${error.message}`);
+    return false;
+
+  } finally {
+    if (conn.release) conn.release();
+  }
+};
 
   // Eliminar un registro de la tabla intermedia
   deleteReservasServicios = async (reserva_servicio_id) => {

@@ -119,9 +119,10 @@ console.log(">>> importe_total:", importe_total);
       importe_salon,
       importe_total,
     });
-
+    console.log(serviciosData)
     const reservaId = result.insertId;
-
+    const servicioId = serviciosData.servicio_id
+    console.log(servicioId);
     // 3️⃣ Insertar servicios asociados
     await this.reservaServicioServicios.addServicioReserva(reservaId, serviciosData);
 
