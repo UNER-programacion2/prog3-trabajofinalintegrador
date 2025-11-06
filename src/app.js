@@ -42,7 +42,10 @@ app.use(morgan('combined', { stream: log }))
 app.use('/api/salones', passport.authenticate('jwt', { session: false }), salonesRouter);
 app.use('/api/usuarios',passport.authenticate('jwt', { session: false }), usuariosRouter);
 
-// estadisticas
+// estadisticas:
+// /api/estadisticas/reservas-por-salon
+// /api/estadisticas/ingresos-mes
+// /api/estadisticas/reservas-por-salon
 app.use('/api/estadisticas', passport.authenticate('jwt', { session: false }) , estadisticasRouter)
 
 app.use('/api/servicios', passport.authenticate('jwt', { session: false }), serviciosRouter);

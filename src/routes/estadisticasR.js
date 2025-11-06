@@ -5,6 +5,11 @@ import autorizarUsuarios from '../middleware/auth/autorizarUsuarios.js';
 const estadisticasRouter = express.Router();
 const controller = new EstadisticasController();
 
+estadisticasRouter.get('/reporte-pdf',
+    autorizarUsuarios(1), 
+    controller.generarReportePDF
+);
+// -----------------------------
 
 estadisticasRouter.get('/ingresos-mes', 
     autorizarUsuarios(1), 
@@ -16,12 +21,34 @@ estadisticasRouter.get('/reservas-por-salon',
     controller.getReservasPorSalon
 );
 
-
 /**
  * @swagger
  * tags:
  *   - name: Estadisticas
  *     description: Endpoints para obtener estadísticas y reportes.
+ */
+ 
+/**
+ * @swagger
+ * /api/estadisticas/reporte-pdf:
+ *   get:
+ *     summary: Genera un reporte PDF con ingresos y reservas por salón.
+ *     tags:
+ *       - Estadisticas
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Reporte PDF generado exitosamente.
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       '403':
+ *         description: Acceso Denegado. Se requiere rol de Administrador (ID 1).
+ *       '500':
+ *         description: Error interno del servidor al generar el reporte.
  */
  
 /**
@@ -94,5 +121,8 @@ estadisticasRouter.get('/reservas-por-salon',
  *                   type: string
  *                   example: "Mensaje de error específico"
  */
+
+
+
 
 export { estadisticasRouter};
