@@ -1,5 +1,5 @@
 import { check } from 'express-validator';
-import { validarCampos } from '../middleware/validarCampos.js';
+import { validarCampos } from './validarCampos.js';
 
 
 export const validarCreateUsuario = [ 

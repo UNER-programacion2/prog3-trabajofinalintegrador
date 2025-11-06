@@ -1,6 +1,4 @@
-
-
-import {conexion} from "./conexion.js";
+import {conexion} from "../db/conexion.js";
 
 export default class EstadisticasDb {
   // Ya no acepta argumentos y ya no usa placeholder (?)

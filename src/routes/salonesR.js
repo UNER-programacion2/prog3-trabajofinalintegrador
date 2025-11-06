@@ -1,11 +1,11 @@
 import express from 'express';
 import passport from 'passport';
 
-import { validarCreateSalon, validarEditSalon } from '../middleware/salonesValidator.js';
+import { validarCreateSalon, validarEditSalon } from '../middleware/validators/salonesValidator.js';
 import salonesController from '../controllers/salones.js'; 
-import { cacheMinutes} from '../middleware/cache.js';
-import { validarId } from '../middleware/validacionId.js'
-import autorizarUsuarios from '../middleware/autorizarUsuarios.js';
+import { cacheMinutes} from '../middleware/cache/cache.js';
+import { validarId } from '../middleware/validators/validacionId.js';
+import autorizarUsuarios from '../middleware/auth/autorizarUsuarios.js';
 
 const salonesRouter = express.Router();
 const controller = new salonesController();

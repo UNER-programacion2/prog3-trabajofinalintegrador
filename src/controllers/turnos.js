@@ -1,5 +1,5 @@
-import turnosServicios from "../servicios/turnosServicio.js";
-import { clearCache } from "../middleware/cache.js";
+import turnosServicios from '../servicios/turnosServicio.js';
+import { clearCache } from '../middleware/cache/cache.js';
 
 
 export default class turnosController{

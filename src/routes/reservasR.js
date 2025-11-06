@@ -1,8 +1,8 @@
 import express from 'express';
 
 import ReservasController from '../controllers/reservas.js';
-import { validarCreateReserva, validarEditReserva } from '../middleware/reservasValidaciones/reservasValidator.js';
-import autorizarUsuarios from '../middleware/autorizarUsuarios.js';
+import { validarCreateReserva, validarEditReserva } from '../middleware/validators/reservasValidator.js';
+import autorizarUsuarios from '../middleware/auth/autorizarUsuarios.js';
 
 const reservasRouter = express.Router();
 const controller = new ReservasController();

@@ -1,7 +1,7 @@
-import reservasDb from "../db/reservasDb.js";
-import { validarFKsReserva } from "./validacionesFk.js";
-import reservaServicioServicios from "./reservaServiciosService.js";
-import NotificacionesService from "./notificacionesService.js";
+import reservasDb from '../db/reservasDb.js';
+import { validarFKsReserva } from './validacionesFk.js';
+import reservaServicioServicios from './reservaServiciosService.js';
+import NotificacionesService from './notificacionesService.js';
 
 
 export default class reservasServicios {

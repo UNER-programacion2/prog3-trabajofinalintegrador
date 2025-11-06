@@ -1,8 +1,8 @@
-import nodemailer from "nodemailer";
-import handlebars from "handlebars";
-import { fileURLToPath } from "url";
-import { readFile } from "fs/promises";
-import path from "path";
+import nodemailer from 'nodemailer';
+import handlebars from 'handlebars';
+import { fileURLToPath } from 'url';
+import { readFile } from 'fs/promises';
+import path from 'path';
 
 export default class NotificacionesService {
   enviarCorreo = async (datosCorreo) => {

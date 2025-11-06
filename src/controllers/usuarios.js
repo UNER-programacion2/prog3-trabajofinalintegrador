@@ -1,4 +1,4 @@
-import UsuariosServicios from "../servicios/usuariosServicios.js";
+import UsuariosServicios from '../servicios/usuariosServicios.js';
 
 export default class UsuariosController {
   constructor() {

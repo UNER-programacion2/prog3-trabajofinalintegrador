@@ -1,5 +1,4 @@
-//import { registroClienteRouter } from "../routes/registroR.js";
-import registroClienteServicios from "../servicios/registroClienteServices.js";
+import registroClienteServicios from "../../servicios/registroClienteServices.js";
 
 export default class registroClienteController {
     constructor() {

@@ -1,9 +1,9 @@
 import express from 'express';
 
 import UsuariosController from '../controllers/usuarios.js';
-import { validarCreateUsuario, validarEditUsuario } from '../middleware/usuariosValidator.js';
-import { validarId } from '../middleware/validacionId.js'
-import autorizarUsuarios from '../middleware/autorizarUsuarios.js';
+import { validarCreateUsuario, validarEditUsuario } from '../middleware/validators/usuariosValidator.js';
+import { validarId } from '../middleware/validators/validacionId.js'
+import autorizarUsuarios from '../middleware/auth/autorizarUsuarios.js';
 
 const usuariosRouter = express.Router();
 const controller = new UsuariosController();

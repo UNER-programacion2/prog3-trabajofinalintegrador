@@ -1,5 +1,5 @@
 // BREAD RESERVAS
-import ReservasServicios from "../servicios/reservas.js";
+import ReservasServicios from '../servicios/reservas.js';
 
 export default class ReservasController {
 

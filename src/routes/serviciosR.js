@@ -1,10 +1,10 @@
 // /routes/serviciosR.js
 import express from 'express';
 import serviciosController from '../controllers/servicios.js'; 
-import { validarCreateServicio, validarEditServicio  } from '../middleware/serviciosValidator.js';
-import { validarId } from '../middleware/validacionId.js'
-import { cacheMinutes} from '../middleware/cache.js';
-import autorizarUsuarios from '../middleware/autorizarUsuarios.js';
+import { validarCreateServicio, validarEditServicio  } from '../middleware/validators/serviciosValidator.js';
+import { validarId } from '../middleware/validators/validacionId.js';
+import { cacheMinutes} from '../middleware/cache/cache.js';
+import autorizarUsuarios from '../middleware/auth/autorizarUsuarios.js';
 
 const serviciosRouter = express.Router();
 const controller = new serviciosController(); 

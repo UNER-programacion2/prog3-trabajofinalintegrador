@@ -1,4 +1,4 @@
-import reservasServiciosDb from "../db/reservasServiciosDb.js";
+import reservasServiciosDb from '../db/reservasServiciosDb.js';
 
 export default class reservaServicioServicios{
 

@@ -1,5 +1,5 @@
 import { check } from 'express-validator';
-import { validarCampos } from '../validarCampos.js';
+import { validarCampos } from '../validators/validarCampos.js';
 
 export const validarCreateReserva = [
   check('fecha_reserva')

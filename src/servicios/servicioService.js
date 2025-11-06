@@ -1,4 +1,4 @@
-import serviciosDb from "../db/serviciosDB.js";
+import serviciosDb from '../db/serviciosDB.js';
 
 export default class serviciosServicios {
 

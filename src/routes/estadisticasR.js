@@ -1,24 +1,63 @@
 import express from 'express';
-import EstadisticasController from "../controllers/estadisticasController.js";
-import autorizarUsuarios from '../middleware/autorizarUsuarios.js'; 
+import EstadisticasController from '../controllers/estadisticasController.js';
+import autorizarUsuarios from '../middleware/auth/autorizarUsuarios.js'; 
 
 const estadisticasRouter = express.Router();
 const controller = new EstadisticasController();
 
 
-estadisticasRouter.get('/',
+estadisticasRouter.get('/ingresos-mes', 
     autorizarUsuarios(1), 
     controller.getReporteIngresos
 );
+
+estadisticasRouter.get('/reservas-por-salon', 
+    autorizarUsuarios(1), 
+    controller.getReservasPorSalon
+);
+
+
 /**
  * @swagger
  * tags:
  *   - name: Estadisticas
- *     description: Endpoint Obtiene el reporte de ingresos de los últimos 30 días.
+ *     description: Endpoints para obtener estadísticas y reportes.
  */
+ 
 /**
  * @swagger
- * /ingresos-mes:
+ * /api/estadisticas/reservas-por-salon:
+ *   get:
+ *     summary: Obtener el conteo de reservas por salón.
+ *     tags:
+ *       - Estadisticas
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Conteo de reservas por salón.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   salon:
+ *                     type: string
+ *                     example: "Salón Principal"
+ *                   cantidad:
+ *                     type: integer
+ *                     example: 10
+ *       '403':
+ *         description: Acceso Denegado. Se requiere rol de Administrador (ID 1).
+ *       '500':
+ *         description: Error interno del servidor.
+ */
+ 
+/**
+ * @swagger
+ * /api/estadisticas/ingresos-mes:
  *   get:
  *     summary: Obtener el reporte de ingresos de los últimos 30 días.
  *     tags:
@@ -41,14 +80,6 @@ estadisticasRouter.get('/',
  *                   example: 15000.50
  *       '403':
  *         description: Acceso Denegado. Se requiere rol de Administrador (ID 1).
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
- *                   example: "Acceso denegado"
  *       '500':
  *         description: Error interno del servidor al generar el reporte.
  *         content:
@@ -61,6 +92,7 @@ estadisticasRouter.get('/',
  *                   example: "Error al generar reporte"
  *                 error:
  *                   type: string
+ *                   example: "Mensaje de error específico"
  */
 
 export { estadisticasRouter};

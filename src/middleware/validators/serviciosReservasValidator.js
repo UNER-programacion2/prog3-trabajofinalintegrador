@@ -1,5 +1,5 @@
 import { check } from 'express-validator';
-import { validarCampos } from '../middleware/validarCampos.js';
+import { validarCampos } from '../validators/validarCampos.js';
 
 // crear reserva_servicio
 export const validarCreateReservaServicio = [

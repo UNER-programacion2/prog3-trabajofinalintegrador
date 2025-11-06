@@ -1,10 +1,10 @@
 import express from 'express';
 
 import turnosController from '../controllers/turnos.js';
-import { cacheMinutes} from '../middleware/cache.js';
-import { validarCreateTurno, validarEditTurno } from '../middleware/turnosValidator.js';
-import { validarId } from '../middleware/validacionId.js';
-import autorizarUsuarios from '../middleware/autorizarUsuarios.js';
+import { cacheMinutes} from '../middleware/cache/cache.js';
+import { validarCreateTurno, validarEditTurno } from '../middleware/validators/turnosValidator.js';
+import { validarId } from '../middleware/validators/validacionId.js';
+import autorizarUsuarios from '../middleware/auth/autorizarUsuarios.js';
 
 const turnosRouter = express.Router();
 const controller = new turnosController();

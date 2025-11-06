@@ -1,7 +1,6 @@
 import express from "express";
 import ReportesController from "../controllers/reportesController.js";
-//import reservasService from "../servicios/reservaServiciosService.js";
-import autorizarUsuarios from "../middleware/autorizarUsuarios.js";
+import autorizarUsuarios from "../middleware/auth/autorizarUsuarios.js";
 
 const reporterRouter = express.Router();
 const controller = new ReportesController();
