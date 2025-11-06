@@ -1,4 +1,5 @@
 import ReservasServicios from '../servicios/reservas.js';
+import serviciosServicios from '../servicios/servicioService.js';
 import puppeteer from 'puppeteer';
 import { Parser } from 'json2csv';
 import { fileURLToPath } from 'url';
@@ -16,14 +17,13 @@ export default class ReportesController {
   
   constructor() {
     this.ReservasServicios = new ReservasServicios();
+    this.serviciosServicios = new serviciosServicios();
     this.template = Handlebars.compile(templateString);
   }
 
   // GET /api/reportes/reservas?formato=pdf|csv
   generarReporte = async (req, res) => {
-
       try {
-      
         const { formato } = req.query;
         const usuarioArray = req.user;
 
@@ -35,7 +35,7 @@ export default class ReportesController {
 
       //obtener datos
       const reservas = await this.ReservasServicios.getAllReservas(usuario); 
-
+      
       if (!reservas || reservas.length === 0)
         return res.status(404).send("No hay reservas registradas");
 
@@ -56,16 +56,25 @@ export default class ReportesController {
   // generar PDF con Puppeteer
   generarPDF = async (reservas, res) => {
 
-    const reservasaParaTemplate = reservas.map(r => ({
-      reserva_id: r.reserva_id,
-      nombre_salon: r.nombre_salon,
-      fecha_reserva: new Date(r.fecha_reserva).toLocaleDateString('es-AR'),
-      hora_desde: r.hora_desde,
-      hora_hasta: r.hora_hasta,
-      usuario: r.usuario,
-      importe_total: `${Number(r.importe_total || 0).toFixed(2)}`,
+  
+const reservasaParaTemplate = reservas.map(r => {
+  //si existe y si es un array
+      const serviciosString = (r.servicios && Array.isArray(r.servicios))
+        ? r.servicios.map(s => s.descripcion).join(', ') 
+        : 'Sin servicios'; 
 
-    }))
+      return {
+        reserva_id: r.reserva_id,
+        nombre_salon: r.nombre_salon,
+        servicios: serviciosString, 
+        fecha_reserva: new Date(r.fecha_reserva).toLocaleDateString('es-AR'),
+        hora_desde: r.hora_desde,
+        hora_hasta: r.hora_hasta,
+        usuario: r.usuario,
+        importe_total: `${Number(r.importe_total || 0).toFixed(2)}`,
+      };
+    });
+    
     const html = this.template ({reservas: reservasaParaTemplate});
 
     const browser = await puppeteer.launch({headless: true,

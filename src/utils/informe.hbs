@@ -25,7 +25,7 @@
         }
 
         th {
-            background-color: rgb(9, 11, 15); /* Estilo del primer archivo */
+            background-color: rgb(9, 11, 15); 
             color: #fff;
             padding: 8px;
             text-align: left;
@@ -34,11 +34,11 @@
         td {
             border-bottom: 1px solid #ccc;
             padding: 8px;
-            text-align: center; /* Estilo del primer archivo */
+            text-align: center; 
         }
 
         tr:nth-child(even) {
-            background-color: #f8f8f8; /* Estilo del primer archivo */
+            background-color: #f8f8f8; 
         }
 
         .footer {
@@ -55,9 +55,9 @@
     <table>
         <thead>
             <tr>
-                {{! Columnas del segundo archivo }}
                 <th>ID</th>
                 <th>Salón</th>
+                <th>Servicios</th>
                 <th>Fecha</th>
                 <th>Hora Inicio</th>
                 <th>Hora Fin</th>
@@ -71,6 +71,7 @@
                 {{! Datos del segundo archivo }}
                 <td>{{this.reserva_id}}</td>
                 <td>{{this.nombre_salon}}</td>
+                <td>{{this.servicios}}</td>
                 <td>{{this.fecha_reserva}}</td>
                 <td>{{this.hora_desde}}</td>
                 <td>{{this.hora_hasta}}</td>

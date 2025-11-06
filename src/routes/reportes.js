@@ -5,7 +5,8 @@ import autorizarUsuarios from "../middleware/auth/autorizarUsuarios.js";
 const reporterRouter = express.Router();
 const controller = new ReportesController();
 
-reporterRouter.get("/reservas",
+
+reporterRouter.get("/",
     autorizarUsuarios(1), 
     controller.generarReporte);
 
