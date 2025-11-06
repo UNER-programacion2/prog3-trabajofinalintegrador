@@ -45,7 +45,7 @@ app.use('/api/salones', passport.authenticate('jwt', { session: false }), salone
 app.use('/api/usuarios',passport.authenticate('jwt', { session: false }), usuariosRouter);
 
 // estadisticas:
-// /api/estadisticas/reservas-por-salon
+// /api/estadisticas/reporte-pdf
 // /api/estadisticas/ingresos-mes
 // /api/estadisticas/reservas-por-salon
 app.use('/api/estadisticas', passport.authenticate('jwt', { session: false }) , estadisticasRouter)

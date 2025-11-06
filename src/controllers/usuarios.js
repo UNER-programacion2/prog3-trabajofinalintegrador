@@ -11,7 +11,7 @@ export default class UsuariosController {
       const usuarios = await this.UsuariosServicios.getUsuarios();
       res.json({ ok: true, usuarios });
     } catch (error) {
-      console.log("Error en GET /usuarios", error);
+      console.eror("Error en GET /usuarios", error);
       res.status(500).json({ ok: false, mensaje: "Error interno del servidor." });
     }
   };
