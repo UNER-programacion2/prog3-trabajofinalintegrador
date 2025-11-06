@@ -1,5 +1,6 @@
-// /routes/serviciosR.js
 import express from 'express';
+import passport from 'passport';
+
 import serviciosController from '../controllers/servicios.js'; 
 import { validarCreateServicio, validarEditServicio  } from '../middleware/validators/serviciosValidator.js';
 import { validarId } from '../middleware/validators/validacionId.js';
@@ -11,11 +12,11 @@ const controller = new serviciosController();
 
 
 serviciosRouter.get('/',
-    autorizarUsuarios(1,2,3),
     cacheMinutes,
     controller.getServicios);
 
 serviciosRouter.post('/',
+    passport.authenticate('jwt', { session: false }),
     autorizarUsuarios(1,2),
     validarCreateServicio,
     controller.addServicio,
@@ -23,16 +24,21 @@ serviciosRouter.post('/',
 
 serviciosRouter.route('/:servicio_id')
     .get(
+        passport.authenticate('jwt', { session: false }),
         autorizarUsuarios(1,2),
         validarId('servicio_id'),
         cacheMinutes,
         controller.getServicioConId)
+
     .put(
+        passport.authenticate('jwt', { session: false }),
         validarId('servicio_id'),
         autorizarUsuarios(1,2),
         validarEditServicio,
         controller.editServicio)
+
     .delete(
+        passport.authenticate('jwt', { session: false }),
         autorizarUsuarios(1,2),
         validarId('servicio_id'),
         controller.deleteServicio);

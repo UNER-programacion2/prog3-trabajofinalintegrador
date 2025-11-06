@@ -9,16 +9,14 @@ import autorizarUsuarios from '../middleware/auth/autorizarUsuarios.js';
 
 const salonesRouter = express.Router();
 const controller = new salonesController();
-const authJwt = passport.authenticate('jwt', { session: false });
 
 salonesRouter.get('/',
     cacheMinutes,
-    authJwt,
-    autorizarUsuarios(1,2,3),
     controller.getSalones);
 
 
 salonesRouter.post('/', 
+    passport.authenticate('jwt', { session: false }),
     validarCreateSalon,
     autorizarUsuarios(1,2), 
     controller.createSalon,
@@ -27,18 +25,21 @@ salonesRouter.post('/',
 
 salonesRouter.route('/:salon_id')
     .get(
+        passport.authenticate('jwt', { session: false }),
         validarId('salon_id'),
         cacheMinutes,
         autorizarUsuarios(1,2),
         controller.getSalonConId)
 
     .put(
+        passport.authenticate('jwt', { session: false }),
         validarId('salon_id'),
         validarEditSalon,
         autorizarUsuarios(1,2),
         controller.editSalon)
 
     .delete(
+        passport.authenticate('jwt', { session: false }),
         validarId('salon_id'),
         autorizarUsuarios(1,2),
         controller.deleteSalon)

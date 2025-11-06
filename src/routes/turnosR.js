@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from 'passport';
 
 import turnosController from '../controllers/turnos.js';
 import { cacheMinutes} from '../middleware/cache/cache.js';
@@ -10,13 +11,13 @@ const turnosRouter = express.Router();
 const controller = new turnosController();
 //get
 turnosRouter.get('/', 
-    autorizarUsuarios(1,2,3),
     cacheMinutes,
     controller.getTurnos
 );
 
 // post
 turnosRouter.post('/', 
+    passport.authenticate('jwt', { session: false }),
     autorizarUsuarios(1,2),
     validarCreateTurno,
     controller.addTurno,
@@ -26,6 +27,7 @@ turnosRouter.post('/',
 turnosRouter.route('/:turno_id')
     // GET turno por ID
     .get( 
+        passport.authenticate('jwt', { session: false }),
         autorizarUsuarios(1,2),
         validarId('turno_id'),
         cacheMinutes,
@@ -33,6 +35,7 @@ turnosRouter.route('/:turno_id')
 
     // PUT turno  
     .put( 
+        passport.authenticate('jwt', { session: false }),
         autorizarUsuarios(1,2),
         validarId('turno_id'),
         validarEditTurno,
@@ -40,6 +43,7 @@ turnosRouter.route('/:turno_id')
 
     // DELETE turno          
     .delete(
+        passport.authenticate('jwt', { session: false }),
         autorizarUsuarios(1,2),
         validarId('turno_id'),
         controller.deleteTurno); 
