@@ -13,13 +13,6 @@ export default class UsuariosServicios {
   getAllUsuarios = async (usuario) => {
     const usuarioReq = usuario.tipo_usuario;
 
-    // if (usuarioReq === 2){
-    //   await this.UsuariosDb.getAllClientes()
-    // }
-    // else{
-    //   await this.UsuariosDb.getAllUsuarios()
-    // }
-
     const usuarioR = usuarioReq < 2
           ? await this.UsuariosDb.getAllUsuarios()
           : await this.UsuariosDb.getAllClientes()
