@@ -1,0 +1,32 @@
+DELIMITER $$
+CREATE DEFINER=root@localhost PROCEDURE obtenerDatosNotificacion(IN p_reserva_id INT)
+BEGIN
+    SELECT
+        r.fecha_reserva AS fecha,
+        r.tematica AS tematica,
+        s.titulo AS salon,
+        t.orden AS turno,
+        t.hora_desde AS inicio,
+        t.hora_hasta AS fin,
+        r.usuario_id AS cliente_id
+    FROM
+        reservas AS r
+    INNER JOIN salones AS s ON s.salon_id = r.salon_id
+    INNER JOIN turnos AS t ON t.turno_id = r.turno_id
+    WHERE
+        r.activo = 1
+        AND r.reserva_id = p_reserva_id;
+
+    SELECT 
+        u.nombre_usuario AS correoAdmin
+    FROM 
+        usuarios AS u
+    WHERE 
+        u.tipo_usuario = 1
+        OR u.usuario_id = (
+            SELECT usuario_id
+            FROM reservas
+            WHERE reserva_id = p_reserva_id
+        );
+END$$
+DELIMITER ;
