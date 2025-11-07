@@ -9,7 +9,6 @@ import {authRouter } from './routes/auth/authR.js';
 import{ registroClienteRouter } from './routes/auth/registroR.js' 
 
 //funcionalidades
-import {emailRouter} from  './routes/emailR.js'; //esto no se si va
 import {reporterRouter} from './routes/reportes.js';
 import {estadisticasRouter} from './routes/estadisticasR.js' 
 
@@ -52,7 +51,6 @@ app.use('/api/estadisticas', passport.authenticate('jwt', { session: false }) , 
 
 app.use('/api/servicios', serviciosRouter);
 app.use('/api/turnos', turnosRouter);
-app.use('/api/notificacion', passport.authenticate('jwt', { session: false }), emailRouter);
 app.use('/api/reservas_servicios', passport.authenticate('jwt', { session: false }),reservasServiciosR);
 app.use('/api/reservas', passport.authenticate('jwt', { session: false }),reservasRouter);
 app.use('/api/auth', authRouter);

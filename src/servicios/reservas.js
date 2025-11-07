@@ -131,10 +131,10 @@ console.log(">>> importe_total:", importe_total);
     await conn.commit();
 
     // 4️⃣ Notificar
-    // const datosParaNotificacion = await this.reservas.datosParaNotificacion(reservaId);
-    // if (datosParaNotificacion?.length) {
-    //   await this.notificacionesService.enviarCorreo(datosParaNotificacion);
-    // }
+    const datosParaNotificacion = await this.reservas.datosParaNotificacion(reservaId);
+    if (datosParaNotificacion?.length) {
+      await this.notificacionesService.enviarCorreo(datosParaNotificacion);
+    }
 
     return this.reservas.getReservaConId(reservaId);
 
