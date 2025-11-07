@@ -1,4 +1,4 @@
-import salonesDb from "../db/salonesDB.js";
+import salonesDb from '../db/salonesDB.js';
 
 export default class salonesServicios{
 

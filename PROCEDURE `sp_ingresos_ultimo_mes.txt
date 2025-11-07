@@ -1,0 +1,12 @@
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_ingresos_ultimo_mes`()
+BEGIN
+    SELECT 
+        SUM(importe_total) AS total_ingresos_30_dias
+    FROM 
+        reservas
+    WHERE
+        activo = 1
+        AND fecha_reserva >= CURDATE() - INTERVAL 30 DAY;
+END$$
+DELIMITER ;

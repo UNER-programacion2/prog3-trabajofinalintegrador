@@ -1,5 +1,6 @@
 //BREAD SALONES
-import SalonesServicios from "../servicios/salonesServicios.js";
+import SalonesServicios from '../servicios/salonesServicios.js';
+import { clearCache } from '../middleware/cache/cache.js';
 
 //GET SALONES - OBTENER TODOS LOS SALONES
 export default class salonesController{
@@ -52,6 +53,8 @@ export default class salonesController{
 
             const nuevoSalon = await this.SalonesServicios.createSalon(salon);
             
+            clearCache('/');
+            
             if(!nuevoSalon){
                 return res.status(400).json
                     ({estado: false, mensaje: 'Faltan campos requeridos.'})
@@ -77,6 +80,9 @@ export default class salonesController{
 
             const salonModificado= await this.SalonesServicios.editSalon(salon_id, datos);
             
+            clearCache('/');
+            clearCache(`/salones/${salon_id}`);
+            
             if(!salonModificado){
                 return res.status(400).json
                     ({estado: false, mensaje: 'Salón no encontrado.'})
@@ -99,6 +105,9 @@ export default class salonesController{
         try{
             const salon_id = req.params.salon_id;
             const salonElimniado = await this.SalonesServicios.deleteSalon(salon_id);
+
+            clearCache('/');
+            clearCache(`/salones/${salon_id}`);
            
             if(salonElimniado.affectedRows === 0){
                 return res.status(404).json

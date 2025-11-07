@@ -4,45 +4,77 @@
   <title>Nueva Reserva</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
+      font-family: "Poppins", Arial, sans-serif;
+      background: linear-gradient(135deg, #e3fdfd, #e6ffea);
       margin: 0;
       padding: 0;
     }
+
     .container {
-      max-width: 650px;
-      margin: 20px auto;
-      padding: 25px;
-      background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      animation: fadeIn 0.7s ease;
     }
+
     header {
+      background: linear-gradient(135deg, #4ade80, #16a34a);
+      color: white;
       text-align: center;
-      padding-bottom: 15px;
-      border-bottom: 2px solid #e0e0e0;
+      padding: 25px 15px;
     }
+
     header h1 {
       margin: 0;
-      color: #03912e;
+      font-size: 26px;
+      font-weight: 600;
     }
+
+    h2 {
+      text-align: center;
+      color: #16a34a;
+      margin-top: 25px;
+      font-size: 22px;
+    }
+
     ul {
-      list-style-type: "📌 ";
-      padding-left: 20px;
+      list-style: none;
+      padding: 0 30px;
+      margin: 20px 0;
     }
+
     li {
-      margin: 8px 0;
+      background: #f8fafc;
+      border-left: 4px solid #16a34a;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      border-radius: 8px;
       font-size: 16px;
       color: #333;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, background-color 0.2s ease;
     }
+
+    li:hover {
+      transform: translateX(4px);
+      background-color: #f0fdf4;
+    }
+
+    strong {
+      color: #065f46;
+    }
+
     footer {
+      background: #f1f5f9;
       text-align: center;
-      margin-top: 20px;
+      padding: 15px;
       font-size: 13px;
-      color: #666;
-      border-top: 1px solid #e0e0e0;
-      padding-top: 10px;
+      color: #64748b;
     }
+
   </style>
 </head>
 <body>
@@ -51,15 +83,18 @@
       <h1>Reservas de Casas de Cumpleaños 🎉</h1>
     </header>
 
-    <h2>Notificación de nueva reserva</h2>
+    <h2>¡Nueva reserva registrada!</h2>
     <ul>
       <li><strong>Fecha de reserva:</strong> {{ fecha }}</li>
       <li><strong>Salón:</strong> {{ salon }}</li>
       <li><strong>Turno:</strong> {{ turno }}</li>
+      <li><strong>Tematica:</strong> {{ tematica }}</li>
+      <li><strong>Inicio:</strong> {{ inicio}}</li>
+      <li><strong>Fin:</strong> {{ fin }}</li>
     </ul>
 
     <footer>
-      &copy; 2025 Reservas de Casas de Cumpleaños
+      &copy; 2025 Reservas de Casas de Cumpleaños. Todos los derechos reservados.
     </footer>
   </div>
 </body>

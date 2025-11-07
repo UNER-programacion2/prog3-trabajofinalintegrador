@@ -1,0 +1,18 @@
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_estadistica_reservas_por_salon`()
+BEGIN
+    SELECT 
+        s.titulo AS salon,
+        COUNT(r.reserva_id) AS cantidad_reservas
+    FROM 
+        reservas AS r
+    INNER JOIN 
+        salones AS s ON s.salon_id = r.salon_id
+    WHERE 
+        r.activo = 1
+    GROUP BY 
+        s.titulo
+    ORDER BY 
+        cantidad_reservas DESC;
+END$$
+DELIMITER ;

@@ -5,10 +5,21 @@ export default class UsuariosServicios {
     this.UsuariosDb = new UsuariosDb();
   }
 
-  getUsuarios = async () => {
-    return await this.UsuariosDb.getUsuarios();
+  getUsuarios = async (nombre_usuario, contrasenia) => {
+    return await this.UsuariosDb.getUsuarios(nombre_usuario, contrasenia);
+    
   };
 
+  getAllUsuarios = async (usuario) => {
+    const usuarioReq = usuario.tipo_usuario;
+
+    const usuarioR = usuarioReq < 2
+          ? await this.UsuariosDb.getAllUsuarios()
+          : await this.UsuariosDb.getAllClientes()
+  
+    return usuarioR;
+  };
+  
   getUsuarioConId = async (id) => {
     return await this.UsuariosDb.getUsuarioConId(id);
   };
