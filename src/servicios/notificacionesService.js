@@ -27,6 +27,9 @@ export default class NotificacionesService {
         fecha: reserva.fecha,
         salon: reserva.salon,
         turno: reserva.turno,
+        tematica: reserva.tematica,
+        inicio: reserva.inicio,
+        fin: reserva.fin,
       });
 
       const transporter = nodemailer.createTransport({
