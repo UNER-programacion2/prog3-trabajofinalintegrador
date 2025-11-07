@@ -6,17 +6,19 @@ export default class reservaServicioServicios{
         this.reservaServicio = new reservasServiciosDb();
     }
 
-
-    // agrear
-    addServicioReserva = async (reserva_id, servicios) => {
-        return await this.reservaServicio.postReservasServicios(reserva_id, servicios);
+    addServicioReserva = async (reserva_id, servicios, conn) => {
+        return await this.reservaServicio.postReservasServicios(reserva_id, servicios, conn);
     }
     
     //eliminar
     deleteReservaServicio = (reserva_servicio_id) => {
         return this.reservaServicio.deleteReservasServicios(reserva_servicio_id);
     }
-    //buscar
+
+    deleteServiciosPorReservaId = (reserva_id, conn) => {
+        return this.reservaServicio.deleteServiciosPorReservaId(reserva_id, conn);
+    }
+
     getServiciosDeReserva = async (reserva_id) => {
         return await this.reservaServicio.getServiciosConDetalle(reserva_id);
     };

@@ -30,7 +30,7 @@ estadisticasRouter.get('/reservas-por-salon',
  
 /**
  * @swagger
- * /api/estadisticas/reporte-pdf:
+ * /estadisticas/reporte-pdf:
  *   get:
  *     summary: Genera un reporte PDF con ingresos y reservas por salón.
  *     tags:
@@ -53,7 +53,7 @@ estadisticasRouter.get('/reservas-por-salon',
  
 /**
  * @swagger
- * /api/estadisticas/reservas-por-salon:
+ * /estadisticas/reservas-por-salon:
  *   get:
  *     summary: Obtener el conteo de reservas por salón.
  *     tags:
@@ -84,7 +84,7 @@ estadisticasRouter.get('/reservas-por-salon',
  
 /**
  * @swagger
- * /api/estadisticas/ingresos-mes:
+ * /estadisticas/ingresos-mes:
  *   get:
  *     summary: Obtener el reporte de ingresos de los últimos 30 días.
  *     tags:

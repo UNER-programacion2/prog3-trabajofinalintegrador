@@ -15,37 +15,43 @@ export default class reservasServiciosDb {
   };
 
   // Obtener datos de servicios por sus IDs (para calcular totales)
-  
+  postReservasServicios = async (reserva_id, servicios, conn) => {
+    const db = conn || (await conexion.getConnection());
+    const autoGestion = !conn; 
 
-  // Insertar servicios asociados a una reserva
-  postReservasServicios = async (reserva_id, servicios) => {
-  const conn = await conexion.getConnection ? await conexion.getConnection() : conexion;
+    try {
+      if (autoGestion) await db.beginTransaction();
 
-  try {
-    await conn.beginTransaction();
+      for (const servicio of servicios) {
+        const sql = "INSERT INTO reservas_servicios (reserva_id, servicio_id, importe) VALUES (?, ?, ?)";
+       
+        await db.execute(sql, [reserva_id, servicio.servicio_id, servicio.importe]);
+      }
 
-    for (const servicio of servicios) {
-      const sql = "INSERT INTO reservas_servicios (reserva_id, servicio_id, importe) VALUES (?, ?, ?)";
-      await conn.execute(sql, [reserva_id, servicio.servicio_id, servicio.importe]);
+      if (autoGestion) await db.commit();
+      return true;
+
+    } catch (error) {
+      if (autoGestion && db.rollback) await db.rollback();
+      console.log(`Error en postReservasServicios: ${error.message}`);
+      throw error; 
+
+    } finally {
+      if (autoGestion && db.release) db.release();
     }
+  };
 
-    await conn.commit();
-    return true;
-
-  } catch (error) {
-    if (conn.rollback) await conn.rollback();
-    console.log(`❌ Error en postReservasServicios: ${error.message}`);
-    return false;
-
-  } finally {
-    if (conn.release) conn.release();
-  }
-};
-
-  // Eliminar un registro de la tabla intermedia
+  // Eliminar registro de tabla intermedia
   deleteReservasServicios = async (reserva_servicio_id) => {
     const sql = `DELETE FROM reservas_servicios WHERE reserva_servicio_id = ?`;
     const [results] = await conexion.execute(sql, [reserva_servicio_id]);
+    return results;
+  };
+
+  deleteServiciosPorReservaId = async (reserva_id, conn) => {
+    const db = conn || conexion; 
+    const sql = `DELETE FROM reservas_servicios WHERE reserva_id = ?`;
+    const [results] = await db.execute(sql, [reserva_id]);
     return results;
   };
 }

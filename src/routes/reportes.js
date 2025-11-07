@@ -19,7 +19,7 @@ reporterRouter.get("/",
 
 /**
  * @swagger
- * /reportes/reservas:
+ * /reportes:
  *   get:
  *     summary: Generar reporte de reservas (PDF o CSV)
  *     tags: [Reportes]

@@ -113,8 +113,6 @@ turnosRouter.route('/:turno_id')
  *   get:
  *     summary: Obtener todos los turnos activos
  *     tags: [Turnos]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       '200':
  *         description: Lista de turnos activos.

@@ -19,8 +19,6 @@ export default class reservasServiciosController{
                 res.status(400).json({ ok: false, mensaje: "Error al crear la reserva de servicio" });
             }
 
-        //     res.json
-        //         ({ ok: true, idReserva: result.insertId, servicio : result.servicio_id, reserva :result.reserva_id });
         
         } catch (error) {
             console.log(error);

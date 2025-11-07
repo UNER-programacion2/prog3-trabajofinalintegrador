@@ -51,8 +51,6 @@ salonesRouter.route('/:salon_id')
  *     summary: Obtener todos los salones activos
  *     tags:
  *       - Salones
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       '200':
  *         description: Lista de salones activos.
@@ -75,7 +73,7 @@ salonesRouter.route('/:salon_id')
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/SalonInput'
+ * 
  *     responses:
  *       '201':
  *         description: Salón creado exitosamente.
@@ -125,7 +123,7 @@ salonesRouter.route('/:salon_id')
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/SalonInput'
+ *         
  *     responses:
  *       '200':
  *         description: Salón actualizado exitosamente.

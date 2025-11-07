@@ -49,7 +49,6 @@ export default class reservasServicios {
   createReserva = async (reserva) => {
   await validarFKsReserva(reserva);
 
-  // ✅ Obtener conexión del pool
   const conn = await conexion.getConnection();
   await conn.beginTransaction();
 
@@ -70,7 +69,6 @@ if (!salon) throw new Error("El salón especificado no existe.");
 // convierte a número (si el campo en DB se llama precio, usa salon.precio)
 const importe_salon = Number(salon.importe ?? salon.precio ?? 0);
 
-// obtiene los servicios con importe
 const serviciosData = servicios.length
   ? await this.servicios.getServicioConIds(servicios)
   : [];
@@ -80,26 +78,12 @@ const totalServicios = serviciosData.reduce((acc, s) => acc + Number(s.importe),
 // suma total
 const importe_total = importe_salon + totalServicios;
 
-// ⚠️ Log para verificar que todo sea número
+//para verificar que todo sea número
 console.log(">>> importe_salon:", importe_salon);
 console.log(">>> totalServicios:", totalServicios);
 console.log(">>> importe_total:", importe_total);
 
 
-
-    // 1️⃣ Obtener precios
-    // const salon = await this.salones.getSalonConId(salon_id);
-    // if (!salon) throw new Error("El salón especificado no existe.");
-
-    // const serviciosData = servicios.length
-    //   ? await this.servicios.getServicioConIds(servicios)
-    //   : [];
-
-    // const importe_salon = salon.importe;
-    // const totalServicios = serviciosData.reduce((acc, s) => acc + s.importe, 0);
-    // const importe_total = importe_salon + totalServicios;
-
-    // 2️⃣ Crear reserva
     console.log("Insertando reserva con datos:", {
       fecha_reserva,
       salon_id,
@@ -125,12 +109,12 @@ console.log(">>> importe_total:", importe_total);
     const reservaId = result.insertId;
     const servicioId = serviciosData.servicio_id
     console.log(servicioId);
-    // 3️⃣ Insertar servicios asociados
+
     await this.reservaServicioServicios.addServicioReserva(reservaId, serviciosData);
 
     await conn.commit();
 
-    // 4️⃣ Notificar
+
     const datosParaNotificacion = await this.reservas.datosParaNotificacion(reservaId);
     if (datosParaNotificacion?.length) {
       await this.notificacionesService.enviarCorreo(datosParaNotificacion);
@@ -140,17 +124,83 @@ console.log(">>> importe_total:", importe_total);
 
   } catch (error) {
     await conn.rollback();
-    console.error("❌ Error en createReserva:", error);
+    console.error("Error en createReserva:", error);
     throw error;
   } finally {
-    conn.release(); // ✅ ahora funciona porque conn viene del pool
+    conn.release(); 
   }
 };
 
-  // PUT - editar reserva existente
+// PUT - editar reserva existente 
   editReserva = async (reserva_id, data) => {
-    await validarFKsReserva(data);
-    return await this.reservas.putReserva(reserva_id, data);
+    const conn = await conexion.getConnection();
+    await conn.beginTransaction();
+
+    try {
+
+      const reservaActualArr = await this.reservas.getReservaConId(reserva_id);
+      if (!reservaActualArr || reservaActualArr.length === 0) {
+        throw new Error("Reserva no encontrada.");
+      }
+      const reservaActual = reservaActualArr[0];
+
+      let serviciosParaCalculo;
+      let serviciosData;
+      const actualizarServicios = data.servicios !== undefined;
+
+      if (actualizarServicios) {
+        serviciosParaCalculo = data.servicios;
+      } else {
+        const serviciosActuales = await this.reservaServicioServicios.getServiciosDeReserva(reserva_id);
+        serviciosParaCalculo = serviciosActuales.map(s => s.servicio_id);
+      }
+      
+      const datosCombinados = {
+        ...reservaActual, // base
+        ...data,          // nuevos datos del body
+      };
+
+   
+      await validarFKsReserva(datosCombinados);
+
+     
+      const salon = await this.salones.getSalonConId(datosCombinados.salon_id);
+      if (!salon) throw new Error("El salón especificado no existe.");
+
+      const importe_salon = Number(salon.importe ?? salon.precio ?? 0);
+
+      serviciosData = serviciosParaCalculo.length
+        ? await this.servicios.getServicioConIds(serviciosParaCalculo)
+        : [];
+
+      const totalServicios = serviciosData.reduce((acc, s) => acc + Number(s.importe), 0);
+      const importe_total = importe_salon + totalServicios;
+
+      const result = await this.reservas.putReserva(reserva_id, {
+        ...datosCombinados,
+        importe_salon,
+        importe_total,
+      });
+
+      if (actualizarServicios) {
+        await this.reservaServicioServicios.deleteServiciosPorReservaId(reserva_id, conn);
+        
+        if (serviciosData.length > 0) {
+          await this.reservaServicioServicios.addServicioReserva(reserva_id, serviciosData, conn);
+        }
+      }
+
+      await conn.commit();
+      return result;
+
+    } catch (error) {
+      await conn.rollback();
+      console.error("Error en editReserva:", error);
+      throw error; 
+    } finally {
+      
+      conn.release();
+    }
   };
 
   // DELETE - eliminar (soft delete) reserva

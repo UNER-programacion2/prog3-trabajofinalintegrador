@@ -1,4 +1,4 @@
-import ReservasServicios from '../servicios/reservas.js';
+import ReservasServicios from '../servicios/reservasService.js';
 import serviciosServicios from '../servicios/servicioService.js';
 import puppeteer from 'puppeteer';
 import { Parser } from 'json2csv';
