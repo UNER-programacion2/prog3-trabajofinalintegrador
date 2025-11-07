@@ -1,6 +1,6 @@
 //BREAD SALONES
-import SalonesServicios from "../servicios/salonesServicios.js";
-import { clearCache } from '../middleware/cache.js';
+import SalonesServicios from '../servicios/salonesServicios.js';
+import { clearCache } from '../middleware/cache/cache.js';
 
 //GET SALONES - OBTENER TODOS LOS SALONES
 export default class salonesController{

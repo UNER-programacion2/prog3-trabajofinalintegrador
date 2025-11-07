@@ -1,5 +1,5 @@
 // BREAD RESERVAS
-import ReservasServicios from "../servicios/reservas.js";
+import ReservasServicios from '../servicios/reservasService.js';
 
 export default class ReservasController {
 
@@ -31,15 +31,7 @@ export default class ReservasController {
   // GET BY ID - OBTENER UNA RESERVA POR ID
   getReservaConId = async (req, res) => {
     try {
-      const reserva_id = parseInt(req.params.reserva_id);
-
-      // Validar ID
-      if (isNaN(reserva_id)) {
-        return res.status(400).json({
-          ok: false,
-          mensaje: "ID de reserva inválido."
-        });
-      }
+      const reserva_id = req.params.reserva_id;
 
       // Obtener reserva
       const reserva = await this.ReservasServicios.getReservaConId(reserva_id);
@@ -87,7 +79,6 @@ export default class ReservasController {
       turno_id,
       foto_cumpleaniero,
       tematica,
-      importe_total,
       servicios
     } = req.body;
     
@@ -110,7 +101,7 @@ export default class ReservasController {
     }
 
     // Validar campos mínimos
-    if (!fecha_reserva || !salon_id || !turno_id || !importe_total) {
+    if (!fecha_reserva || !salon_id || !turno_id) {
       return res.status(400).json({
         estado: false,
         mensaje: 'Faltan campos requeridos.'
@@ -124,7 +115,6 @@ export default class ReservasController {
       turno_id,
       foto_cumpleaniero,
       tematica,
-      importe_total,
       servicios
     };
 
@@ -238,4 +228,16 @@ export default class ReservasController {
       });
     }
   };
+
+  // se crea store procedure notificacion 
+   datosParaNotificacion = async(reserva_id) => {
+        const sql = `CALL obtenerDatosNotificacion(?)`;
+        
+        const [reserva] = await conexion.execute(sql, [reserva_id]);
+        if(reserva.length === 0){
+            return null;
+        }
+
+        return reserva;
+    };
 }

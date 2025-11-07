@@ -23,6 +23,15 @@ export default class UsuariosDb {
       return rows;
     };
 
+  getAllClientes = async () => {
+      const sql = `SELECT u.usuario_id, CONCAT(u.nombre, ' ', u.apellido) as usuario, u.tipo_usuario
+                      FROM usuarios  AS u
+                      WHERE U.tipo_usuario = 3 AND u.activo = 1
+                      `;
+      const [rows] = await conexion.execute(sql);
+      return rows;
+    };  
+
 
   // GET: usuario por ID
   getUsuarioConId = async (usuario_id) => {

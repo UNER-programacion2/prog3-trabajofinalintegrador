@@ -1,6 +1,4 @@
-
-import { usuariosRouter } from "../routes/usuariosR.js";
-import UsuariosServicios from "../servicios/usuariosServicios.js";
+import UsuariosServicios from '../servicios/usuariosServicios.js';
 
 export default class UsuariosController {
   constructor() {
@@ -13,7 +11,7 @@ export default class UsuariosController {
       const usuarios = await this.UsuariosServicios.getUsuarios();
       res.json({ ok: true, usuarios });
     } catch (error) {
-      console.log("Error en GET /usuarios", error);
+      console.eror("Error en GET /usuarios", error);
       res.status(500).json({ ok: false, mensaje: "Error interno del servidor." });
     }
   };
@@ -21,7 +19,13 @@ export default class UsuariosController {
 
   getAllUsuarios = async (req, res) => {
     try {
-      const usuarios = await this.UsuariosServicios.getAllUsuarios(); 
+      const usuarioArray = req.user;
+      if (!usuarioArray || usuarioArray.length === 0) {
+            return res.status(401).json({ estado: false, mensaje: 'Usuario no autenticado.' });
+        }
+      const usuario = usuarioArray[0];
+
+      const usuarios = await this.UsuariosServicios.getAllUsuarios(usuario); 
       res.status(200).json(usuarios);
 
     } catch (error) {
@@ -33,10 +37,8 @@ export default class UsuariosController {
   // GET /usuarios/:usuario_id
   getUsuarioConId = async (req, res) => {
     try {
-      const usuario_id = parseInt(req.params.usuario_id);
-      if (isNaN(usuario_id))
-        return res.status(400).json({ ok: false, mensaje: "ID inválido." });
-
+      const usuario_id = req.params.usuario_id;
+   
       const usuario = await this.UsuariosServicios.getUsuarioConId(usuario_id);
       if (usuario.length === 0)
         return res.status(404).json({ ok: false, mensaje: "Usuario no encontrado." });

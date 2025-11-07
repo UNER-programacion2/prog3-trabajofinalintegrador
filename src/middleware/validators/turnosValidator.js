@@ -1,5 +1,5 @@
 import { check } from 'express-validator';
-import { validarCampos } from '../middleware/validarCampos.js';
+import { validarCampos } from '../validators/validarCampos.js';
 
 // create turno
 export const validarCreateTurno = [
@@ -15,9 +15,6 @@ export const validarCreateTurno = [
     .not().isEmpty().withMessage("La hora de fin es obligatoria.")
     .matches(/^([0-1]\d|2[0-3]):([0-5]\d)$/).withMessage("El formato de la hora de fin debe ser HH:mm (ejemplo: 10:30)."),
 
-  check('activo')
-    .optional()
-    .isBoolean().withMessage("El campo 'activo' debe ser verdadero o falso (true/false, 1/0)."),
 
   validarCampos
 ];
@@ -37,9 +34,6 @@ export const validarEditTurno = [
     .optional()
     .matches(/^([0-1]\d|2[0-3]):([0-5]\d)$/).withMessage("El formato de la hora de fin debe ser HH:mm (ejemplo: 10:30)."),
 
-  check('activo')
-    .optional()
-    .isBoolean().withMessage("El campo 'activo' debe ser verdadero o falso (true/false, 1/0)."),
 
   validarCampos
 ];

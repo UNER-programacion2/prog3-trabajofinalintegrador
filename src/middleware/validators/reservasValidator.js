@@ -1,5 +1,5 @@
 import { check } from 'express-validator';
-import { validarCampos } from '../validarCampos.js';
+import { validarCampos } from '../validators/validarCampos.js';
 
 export const validarCreateReserva = [
   check('fecha_reserva')
@@ -11,27 +11,17 @@ export const validarCreateReserva = [
     .isInt({ gt: 0 }).withMessage('El ID del salón debe ser un número entero positivo.'),
 
   check('usuario_id')
-    .notEmpty().withMessage('El ID del usuario es obligatorio.')
+    .optional()
     .isInt({ gt: 0 }).withMessage('El ID del usuario debe ser un número entero positivo.'),
 
   check('turno_id')
     .notEmpty().withMessage('El ID del turno es obligatorio.')
     .isInt({ gt: 0 }).withMessage('El ID del turno debe ser un número entero positivo.'),
 
-  check('importe_total')
-    .notEmpty().withMessage('El importe total es obligatorio.')
-    .isFloat({ gt: 0 }).withMessage('El importe total debe ser un número positivo.'),
-
-  check('servicios') 
-    .isArray({ min: 1 }).withMessage("Debe incluir un array servicios con al menos un servicio."),
-
-check('servicios.*.servicio_id')
-    .not().isEmpty().withMessage("servicio_id es obligatorio.")
-    .isInt({ gt: 0 }).withMessage("El 'servicio_id' debe ser un número entero positivo."),
-
-check('servicios.*.importe')
-    .not().isEmpty().withMessage("Cada servicio debe tener un importe obligatorio.")
-    .isFloat({ gt: 0 }).withMessage("El importe debe ser un número positivo."),
+   check('servicios')
+    .isArray().withMessage('El campo "servicios" debe ser un array.')
+    .custom((arr) => arr.every((id) => Number.isInteger(id) && id > 0))
+    .withMessage('Cada elemento del array "servicios" debe ser un número entero positivo.'),
 
   validarCampos
 ];

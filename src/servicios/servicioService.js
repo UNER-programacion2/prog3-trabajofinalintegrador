@@ -1,9 +1,10 @@
-import serviciosDb from "../db/serviciosDB.js";
+import serviciosDb from '../db/serviciosDB.js';
 
 export default class serviciosServicios {
 
     constructor() {
         this.servicios = new serviciosDb();
+        
     }
 
     getAllServicios = () => {
@@ -12,6 +13,10 @@ export default class serviciosServicios {
 
     getServicioConId = (servicio_id) => {
         return this.servicios.getServicioConId(servicio_id);
+    }
+
+    getServicioConIds = (ids) =>{
+        return this.servicios.getServiciosByIds(ids);
     }
 
     createServicio = (data) => {

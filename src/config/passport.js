@@ -1,5 +1,5 @@
-import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
-import { Strategy as LocalSrategy } from "passport-local";
+import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
+import { Strategy as LocalSrategy } from 'passport-local';
 
 import UsuariosServicios from '../servicios/usuariosServicios.js';
 

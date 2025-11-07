@@ -1,5 +1,5 @@
-import turnosServicios from "../servicios/turnosServicio.js";
-import { clearCache } from "../middleware/cache.js";
+import turnosServicios from '../servicios/turnosServicio.js';
+import { clearCache } from '../middleware/cache/cache.js';
 
 
 export default class turnosController{
@@ -24,9 +24,6 @@ export default class turnosController{
     getTurnoConId = async (req, res) => {
     try {
       const turno_id = req.params.turno_id;
-
-      if (isNaN(turno_id))
-        return res.status(400).json({ ok: false, mensaje: "ID inválido." });
 
       const turno = await this.turnosServicios.getTurnoConId(turno_id);
 
