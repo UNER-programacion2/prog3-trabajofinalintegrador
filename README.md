@@ -1,5 +1,5 @@
 # prog3-trabajofinalintegrador
-Trabajo Final Integrador de la materia PROGRAMACIÓN 3
+Trabajo Final Integrador de la materia PROGRAMACIÓN 3: REALIZADO CON NODE JS, EXPRESS JS Y SQL
 
 AUTORES 
 
@@ -14,6 +14,3 @@ Dentro de las carpetas src están los 3 archivos de procedure necesarios para el
 * PROCEDURE `sp_ingresos_ultimo_mes.txt
 * PROCEDURE obtenerDatosNotificacion.txt
 
-El ejemplo del env esta dentro de este drive junto el link del video, los procedure y la colección de BRUNO:
-
-https://drive.google.com/drive/folders/1Ssc2qC2TpnUvjgjnrGVLfiwr4hq7kXJx?usp=drive_link
