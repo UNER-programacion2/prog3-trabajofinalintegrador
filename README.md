@@ -1,7 +1,7 @@
 # prog3-trabajofinalintegrador
 Trabajo Final Integrador de la materia PROGRAMACIÓN 3: REALIZADO CON NODE JS, EXPRESS JS Y SQL
 
-AUTORES 
+AUTORES
 
 * Avalos Victoria Inés 
 * Peralta Cassutti Noah Nicanor 
