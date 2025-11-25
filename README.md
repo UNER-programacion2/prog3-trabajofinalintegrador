@@ -14,10 +14,6 @@ Dentro de las carpetas src están los 3 archivos de procedure necesarios para el
 * PROCEDURE `sp_ingresos_ultimo_mes.txt
 * PROCEDURE obtenerDatosNotificacion.txt
 
-Video:
-https://youtu.be/JutzG7NHtQU
-
-
 El ejemplo del env esta dentro de este drive junto el link del video, los procedure y la colección de BRUNO:
 
 https://drive.google.com/drive/folders/1Ssc2qC2TpnUvjgjnrGVLfiwr4hq7kXJx?usp=drive_link
